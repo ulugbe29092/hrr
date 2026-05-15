@@ -1,0 +1,95 @@
+{
+  "common": {
+    "save": "Saqlash",
+    "cancel": "Bekor qilish",
+    "delete": "O'chirish",
+    "edit": "Tahrirlash",
+    "add": "Qo'shish",
+    "search": "Qidirish",
+    "filter": "Filtrlash",
+    "export": "Eksport",
+    "import": "Import",
+    "loading": "Yuklanmoqda...",
+    "noData": "Ma'lumot topilmadi",
+    "success": "Muvaffaqiyatli",
+    "error": "Xatolik",
+    "confirm": "Tasdiqlash",
+    "yes": "Ha",
+    "no": "Yo'q"
+  },
+  "auth": {
+    "login": "Kirish",
+    "logout": "Chiqish",
+    "username": "Login",
+    "password": "Parol",
+    "loginError": "Login yoki parol noto'g'ri",
+    "welcome": "Xush kelibsiz"
+  },
+  "nav": {
+    "dashboard": "Bosh sahifa",
+    "products": "Mahsulotlar",
+    "transactions": "Tranzaksiyalar",
+    "income": "Kirim",
+    "expense": "Chiqim",
+    "employees": "Xodimlar",
+    "attendance": "Davomat",
+    "reports": "Hisobotlar",
+    "notifications": "Bildirishnomalar",
+    "profile": "Profil",
+    "admin": "Admin panel"
+  },
+  "dashboard": {
+    "title": "Bosh sahifa",
+    "totalEmployees": "Jami xodimlar",
+    "todayPresent": "Bugun kelganlar",
+    "totalProducts": "Jami mahsulotlar",
+    "todayIncome": "Bugungi kirim",
+    "todayExpense": "Bugungi chiqim",
+    "totalBalance": "Jami qoldiq",
+    "todayProfit": "Bugungi foyda",
+    "recentNotifications": "So'nggi bildirishnomalar",
+    "recentTransactions": "So'nggi tranzaksiyalar"
+  },
+  "products": {
+    "title": "Mahsulotlar",
+    "addProduct": "Mahsulot qo'shish",
+    "productName": "Mahsulot nomi",
+    "buyPrice": "Kelish narxi",
+    "sellPrice": "Sotish narxi",
+    "image": "Rasm",
+    "totalIncome": "Jami kirim",
+    "totalExpense": "Jami chiqim",
+    "balance": "Qoldiq",
+    "profit": "Foyda",
+    "history": "Tarix"
+  },
+  "transactions": {
+    "title": "Tranzaksiyalar",
+    "addIncome": "Kirim qo'shish",
+    "addExpense": "Chiqim qo'shish",
+    "product": "Mahsulot",
+    "quantity": "Miqdor",
+    "type": "Turi",
+    "note": "Izoh",
+    "date": "Sana",
+    "createdBy": "Yaratuvchi"
+  },
+  "employees": {
+    "title": "Xodimlar",
+    "addEmployee": "Xodim qo'shish",
+    "fullName": "To'liq ism",
+    "role": "Rol",
+    "phone": "Telefon",
+    "address": "Manzil",
+    "status": "Holat"
+  },
+  "reports": {
+    "title": "Hisobotlar",
+    "daily": "Kunlik",
+    "weekly": "Haftalik",
+    "monthly": "Oylik",
+    "downloadPDF": "PDF yuklab olish",
+    "downloadExcel": "Excel yuklab olish",
+    "period": "Davr"
+  }
+}

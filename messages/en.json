@@ -1,0 +1,95 @@
+{
+  "common": {
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "add": "Add",
+    "search": "Search",
+    "filter": "Filter",
+    "export": "Export",
+    "import": "Import",
+    "loading": "Loading...",
+    "noData": "No data found",
+    "success": "Success",
+    "error": "Error",
+    "confirm": "Confirm",
+    "yes": "Yes",
+    "no": "No"
+  },
+  "auth": {
+    "login": "Login",
+    "logout": "Logout",
+    "username": "Username",
+    "password": "Password",
+    "loginError": "Invalid username or password",
+    "welcome": "Welcome"
+  },
+  "nav": {
+    "dashboard": "Dashboard",
+    "products": "Products",
+    "transactions": "Transactions",
+    "income": "Income",
+    "expense": "Expense",
+    "employees": "Employees",
+    "attendance": "Attendance",
+    "reports": "Reports",
+    "notifications": "Notifications",
+    "profile": "Profile",
+    "admin": "Admin Panel"
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "totalEmployees": "Total Employees",
+    "todayPresent": "Present Today",
+    "totalProducts": "Total Products",
+    "todayIncome": "Today's Income",
+    "todayExpense": "Today's Expense",
+    "totalBalance": "Total Balance",
+    "todayProfit": "Today's Profit",
+    "recentNotifications": "Recent Notifications",
+    "recentTransactions": "Recent Transactions"
+  },
+  "products": {
+    "title": "Products",
+    "addProduct": "Add Product",
+    "productName": "Product Name",
+    "buyPrice": "Buy Price",
+    "sellPrice": "Sell Price",
+    "image": "Image",
+    "totalIncome": "Total Income",
+    "totalExpense": "Total Expense",
+    "balance": "Balance",
+    "profit": "Profit",
+    "history": "History"
+  },
+  "transactions": {
+    "title": "Transactions",
+    "addIncome": "Add Income",
+    "addExpense": "Add Expense",
+    "product": "Product",
+    "quantity": "Quantity",
+    "type": "Type",
+    "note": "Note",
+    "date": "Date",
+    "createdBy": "Created By"
+  },
+  "employees": {
+    "title": "Employees",
+    "addEmployee": "Add Employee",
+    "fullName": "Full Name",
+    "role": "Role",
+    "phone": "Phone",
+    "address": "Address",
+    "status": "Status"
+  },
+  "reports": {
+    "title": "Reports",
+    "daily": "Daily",
+    "weekly": "Weekly",
+    "monthly": "Monthly",
+    "downloadPDF": "Download PDF",
+    "downloadExcel": "Download Excel",
+    "period": "Period"
+  }
+}

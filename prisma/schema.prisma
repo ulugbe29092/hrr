@@ -1,0 +1,116 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  ADMIN
+  BOSHLIQ
+  SOTUVCHI
+  OMBORCHI
+}
+
+enum TransactionType {
+  KIRIM
+  CHIQIM
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  fullName  String
+  login     String   @unique
+  password  String
+  role      Role
+  phone     String?
+  address   String?
+  avatar    String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  sessions      Session[]
+  attendances   Attendance[]
+  products      Product[]
+  transactions  Transaction[]
+  notifications Notification[]
+  createdAttendances Attendance[] @relation("AttendanceCreator")
+
+  @@map("users")
+}
+
+model Session {
+  id         Int       @id @default(autoincrement())
+  userId     Int
+  loginAt    DateTime  @default(now())
+  logoutAt   DateTime?
+  ipAddress  String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("sessions")
+}
+
+model Attendance {
+  id        Int       @id @default(autoincrement())
+  userId    Int
+  date      DateTime  @db.Date
+  arrivedAt DateTime
+  leftAt    DateTime?
+  note      String?
+  createdBy Int
+
+  user    User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  creator User @relation("AttendanceCreator", fields: [createdBy], references: [id])
+
+  @@map("attendance")
+}
+
+model Product {
+  id        Int      @id @default(autoincrement())
+  name      String   @unique
+  image     String?
+  buyPrice  Decimal  @db.Decimal(10, 2)
+  sellPrice Decimal  @db.Decimal(10, 2)
+  createdBy Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  creator      User          @relation(fields: [createdBy], references: [id])
+  transactions Transaction[]
+
+  @@map("products")
+}
+
+model Transaction {
+  id        Int             @id @default(autoincrement())
+  productId Int
+  type      TransactionType
+  quantity  Int
+  note      String?
+  createdBy Int
+  createdAt DateTime        @default(now())
+
+  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+  creator User    @relation(fields: [createdBy], references: [id])
+
+  @@map("transactions")
+}
+
+model Notification {
+  id        Int      @id @default(autoincrement())
+  title     String
+  body      String
+  createdBy Int
+  createdAt DateTime @default(now())
+  isRead    Boolean  @default(false)
+
+  creator User @relation(fields: [createdBy], references: [id])
+
+  @@map("notifications")
+}

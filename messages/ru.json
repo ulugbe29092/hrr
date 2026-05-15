@@ -1,0 +1,95 @@
+{
+  "common": {
+    "save": "Сохранить",
+    "cancel": "Отмена",
+    "delete": "Удалить",
+    "edit": "Редактировать",
+    "add": "Добавить",
+    "search": "Поиск",
+    "filter": "Фильтр",
+    "export": "Экспорт",
+    "import": "Импорт",
+    "loading": "Загрузка...",
+    "noData": "Данные не найдены",
+    "success": "Успешно",
+    "error": "Ошибка",
+    "confirm": "Подтвердить",
+    "yes": "Да",
+    "no": "Нет"
+  },
+  "auth": {
+    "login": "Войти",
+    "logout": "Выйти",
+    "username": "Логин",
+    "password": "Пароль",
+    "loginError": "Неверный логин или пароль",
+    "welcome": "Добро пожаловать"
+  },
+  "nav": {
+    "dashboard": "Главная",
+    "products": "Товары",
+    "transactions": "Транзакции",
+    "income": "Приход",
+    "expense": "Расход",
+    "employees": "Сотрудники",
+    "attendance": "Посещаемость",
+    "reports": "Отчеты",
+    "notifications": "Уведомления",
+    "profile": "Профиль",
+    "admin": "Админ панель"
+  },
+  "dashboard": {
+    "title": "Главная",
+    "totalEmployees": "Всего сотрудников",
+    "todayPresent": "Сегодня присутствуют",
+    "totalProducts": "Всего товаров",
+    "todayIncome": "Приход сегодня",
+    "todayExpense": "Расход сегодня",
+    "totalBalance": "Общий остаток",
+    "todayProfit": "Прибыль сегодня",
+    "recentNotifications": "Последние уведомления",
+    "recentTransactions": "Последние транзакции"
+  },
+  "products": {
+    "title": "Товары",
+    "addProduct": "Добавить товар",
+    "productName": "Название товара",
+    "buyPrice": "Цена закупки",
+    "sellPrice": "Цена продажи",
+    "image": "Изображение",
+    "totalIncome": "Всего приход",
+    "totalExpense": "Всего расход",
+    "balance": "Остаток",
+    "profit": "Прибыль",
+    "history": "История"
+  },
+  "transactions": {
+    "title": "Транзакции",
+    "addIncome": "Добавить приход",
+    "addExpense": "Добавить расход",
+    "product": "Товар",
+    "quantity": "Количество",
+    "type": "Тип",
+    "note": "Примечание",
+    "date": "Дата",
+    "createdBy": "Создал"
+  },
+  "employees": {
+    "title": "Сотрудники",
+    "addEmployee": "Добавить сотрудника",
+    "fullName": "Полное имя",
+    "role": "Роль",
+    "phone": "Телефон",
+    "address": "Адрес",
+    "status": "Статус"
+  },
+  "reports": {
+    "title": "Отчеты",
+    "daily": "Ежедневный",
+    "weekly": "Еженедельный",
+    "monthly": "Ежемесячный",
+    "downloadPDF": "Скачать PDF",
+    "downloadExcel": "Скачать Excel",
+    "period": "Период"
+  }
+}
