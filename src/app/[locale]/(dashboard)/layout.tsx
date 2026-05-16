@@ -2,7 +2,7 @@
 
 import { SessionProvider } from 'next-auth/react';
 import { useSession } from 'next-auth/react';
-import { useRouter, useParams } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
 import { useEffect } from 'react';
 import Sidebar from '@/components/layout/Sidebar';
 import Header from '@/components/layout/Header';
@@ -10,8 +10,8 @@ import Header from '@/components/layout/Header';
 function DashboardContent({ children }: { children: React.ReactNode }) {
   const { data: session, status } = useSession();
   const router = useRouter();
-  const params = useParams();
-  const locale = params.locale as string;
+  const pathname = usePathname();
+  const locale = pathname.split('/')[1] || 'uz';
 
   useEffect(() => {
     if (status === 'unauthenticated') {
