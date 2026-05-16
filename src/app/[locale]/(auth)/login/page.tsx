@@ -4,7 +4,6 @@ import { useState } from 'react';
 import { signIn } from 'next-auth/react';
 import { useRouter, usePathname } from 'next/navigation';
 import { useTranslations } from '@/hooks/useTranslations';
-import { motion } from 'framer-motion';
 import Input from '@/components/ui/Input';
 import Button from '@/components/ui/Button';
 
@@ -46,11 +45,7 @@ export default function LoginPage() {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary-500 to-primary-700 px-4">
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="bg-white rounded-2xl shadow-2xl p-8 w-full max-w-md"
-      >
+      <div className="bg-white rounded-2xl shadow-2xl p-8 w-full max-w-md animate-fade-in">
         <div className="text-center mb-8">
           <div className="inline-flex items-center justify-center w-16 h-16 bg-primary-600 rounded-2xl mb-4 shadow-lg">
             <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -84,13 +79,9 @@ export default function LoginPage() {
           />
 
           {error && (
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg text-sm"
-            >
+            <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg text-sm animate-fade-in">
               {error}
-            </motion.div>
+            </div>
           )}
 
           <Button
@@ -106,7 +97,7 @@ export default function LoginPage() {
         <div className="mt-6 text-center text-sm text-gray-600">
           <p>Demo: admin / admin123</p>
         </div>
-      </motion.div>
+      </div>
     </div>
   );
 }
