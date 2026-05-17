@@ -2,8 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
-import { useTranslations } from 'next-intl';
-import { motion } from 'framer-motion';
+import { useTranslations } from '@/hooks/useTranslations';
 import { ArrowLeft, Edit } from 'lucide-react';
 import Link from 'next/link';
 import Button from '@/components/ui/Button';
@@ -89,16 +88,12 @@ export default function ProductDetailPage() {
           { label: t('balance'), value: `${product.balance} ta`, color: product.balance < 5 ? 'text-red-700' : 'text-green-700' },
           { label: t('profit'), value: formatCurrency(product.profit), color: 'text-emerald-700' },
         ].map((stat) => (
-          <motion.div
-            key={stat.label}
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-          >
+          <div key={stat.label} className="animate-fadeIn">
             <Card>
               <p className="text-sm text-gray-500">{stat.label}</p>
               <p className={`text-xl font-bold mt-1 ${stat.color}`}>{stat.value}</p>
             </Card>
-          </motion.div>
+          </div>
         ))}
       </div>
 

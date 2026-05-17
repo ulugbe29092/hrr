@@ -1,7 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
-import { uploadImage } from '@/lib/cloudinary';
+import { writeFile, mkdir } from 'fs/promises';
+import { join } from 'path';
+import { existsSync } from 'fs';
 
 export async function POST(req: NextRequest) {
   const session = await getServerSession(authOptions);
@@ -15,17 +17,32 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Fayl topilmadi' }, { status: 400 });
     }
 
-    // Fayl hajmini tekshirish (5MB)
-    if (file.size > 5 * 1024 * 1024) {
-      return NextResponse.json({ error: 'Fayl hajmi 5MB dan oshmasligi kerak' }, { status: 400 });
+    // Fayl hajmini tekshirish (20MB)
+    if (file.size > 20 * 1024 * 1024) {
+      return NextResponse.json({ error: 'Fayl hajmi 20MB dan oshmasligi kerak' }, { status: 400 });
     }
 
-    // Fayl turini tekshirish
-    if (!file.type.startsWith('image/')) {
-      return NextResponse.json({ error: 'Faqat rasm fayllari qabul qilinadi' }, { status: 400 });
+    // Fayl nomini yaratish
+    const bytes = await file.arrayBuffer();
+    const buffer = Buffer.from(bytes);
+    
+    const timestamp = Date.now();
+    const originalName = file.name.replace(/[^a-zA-Z0-9.-]/g, '_');
+    const fileName = `${timestamp}-${originalName}`;
+    
+    // Uploads papkasini yaratish
+    const uploadsDir = join(process.cwd(), 'public', 'uploads');
+    if (!existsSync(uploadsDir)) {
+      await mkdir(uploadsDir, { recursive: true });
     }
-
-    const url = await uploadImage(file);
+    
+    // Faylni saqlash
+    const filePath = join(uploadsDir, fileName);
+    await writeFile(filePath, buffer);
+    
+    // URL qaytarish
+    const url = `/uploads/${fileName}`;
+    
     return NextResponse.json({ url });
   } catch (error) {
     console.error('Upload error:', error);

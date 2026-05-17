@@ -1,9 +1,8 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useTranslations } from 'next-intl';
+import { useTranslations } from '@/hooks/useTranslations';
 import { useSession } from 'next-auth/react';
-import { motion } from 'framer-motion';
 import { Plus, Edit } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -21,9 +20,7 @@ import { formatDate, formatDateTime } from '@/lib/utils';
 
 const schema = z.object({
   userId: z.string().min(1, 'Xodim tanlanishi shart'),
-  date: z.string().min(1, 'Sana kiritilishi shart'),
-  arrivedAt: z.string().min(1, 'Kelish vaqti kiritilishi shart'),
-  leftAt: z.string().optional(),
+  date: z.string().min(1, 'Sana tanlanishi shart'),
   note: z.string().optional(),
 });
 
@@ -77,7 +74,11 @@ export default function AttendancePage() {
 
   const openAdd = () => {
     setEditId(null);
-    reset({ date: new Date().toISOString().split('T')[0] });
+    reset({ 
+      userId: '',
+      date: new Date().toISOString().split('T')[0],
+      note: ''
+    });
     setIsModalOpen(true);
   };
 
@@ -86,8 +87,6 @@ export default function AttendancePage() {
     reset({
       userId: String(rec.user.id),
       date: rec.date.split('T')[0],
-      arrivedAt: rec.arrivedAt.slice(0, 16),
-      leftAt: rec.leftAt ? rec.leftAt.slice(0, 16) : '',
       note: rec.note || '',
     });
     setIsModalOpen(true);
@@ -99,14 +98,20 @@ export default function AttendancePage() {
       const url = editId ? `/api/attendance/${editId}` : '/api/attendance';
       const method = editId ? 'PATCH' : 'POST';
 
+      // Hozirgi vaqtni olish
+      const now = new Date();
+      const selectedDate = new Date(data.date);
+      
+      // Tanlangan sanaga hozirgi vaqtni qo'shish
+      selectedDate.setHours(now.getHours(), now.getMinutes(), now.getSeconds());
+
       const res = await fetch(url, {
         method,
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           userId: parseInt(data.userId),
           date: data.date,
-          arrivedAt: data.arrivedAt,
-          leftAt: data.leftAt || undefined,
+          arrivedAt: selectedDate.toISOString(),
           note: data.note || undefined,
         }),
       });
@@ -140,7 +145,7 @@ export default function AttendancePage() {
           <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-primary-600" />
         </div>
       ) : (
-        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+        <div className="animate-fadeIn">
           <Table>
             <Thead>
               <Tr>
@@ -196,7 +201,7 @@ export default function AttendancePage() {
               )}
             </Tbody>
           </Table>
-        </motion.div>
+        </div>
       )}
 
       {/* Add/Edit Modal */}
@@ -219,17 +224,11 @@ export default function AttendancePage() {
             error={errors.date?.message}
             {...register('date')}
           />
-          <Input
-            label="Kelish vaqti"
-            type="datetime-local"
-            error={errors.arrivedAt?.message}
-            {...register('arrivedAt')}
-          />
-          <Input
-            label="Ketish vaqti (ixtiyoriy)"
-            type="datetime-local"
-            {...register('leftAt')}
-          />
+          <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
+            <p className="text-sm text-blue-700">
+              ℹ️ Kelish vaqti avtomatik hozirgi vaqt bo'ladi
+            </p>
+          </div>
           <Input
             label="Izoh (ixtiyoriy)"
             placeholder="..."

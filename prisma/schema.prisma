@@ -1,57 +1,41 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
-}
-
-enum Role {
-  ADMIN
-  BOSHLIQ
-  SOTUVCHI
-  OMBORCHI
-}
-
-enum TransactionType {
-  KIRIM
-  CHIQIM
+  provider = "sqlite"
+  url      = "file:./dev.db"
 }
 
 model User {
-  id        Int      @id @default(autoincrement())
-  fullName  String
-  login     String   @unique
-  password  String
-  role      Role
-  phone     String?
-  address   String?
-  avatar    String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  sessions      Session[]
-  attendances   Attendance[]
-  products      Product[]
-  transactions  Transaction[]
-  notifications Notification[]
-  createdAttendances Attendance[] @relation("AttendanceCreator")
+  id                 Int            @id @default(autoincrement())
+  fullName           String
+  login              String         @unique
+  password           String
+  role               String
+  phone              String?
+  address            String?
+  avatar             String?
+  createdAt          DateTime       @default(now())
+  updatedAt          DateTime       @updatedAt
+  createdAttendances Attendance[]   @relation("AttendanceCreator")
+  attendances        Attendance[]
+  messages           Message[]
+  notifications      Notification[]
+  products           Product[]
+  sessions           Session[]
+  transactions       Transaction[]
 
   @@map("users")
 }
 
 model Session {
-  id         Int       @id @default(autoincrement())
-  userId     Int
-  loginAt    DateTime  @default(now())
-  logoutAt   DateTime?
-  ipAddress  String?
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id        Int       @id @default(autoincrement())
+  userId    Int
+  loginAt   DateTime  @default(now())
+  logoutAt  DateTime?
+  ipAddress String?
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@map("sessions")
 }
@@ -59,28 +43,26 @@ model Session {
 model Attendance {
   id        Int       @id @default(autoincrement())
   userId    Int
-  date      DateTime  @db.Date
+  date      DateTime
   arrivedAt DateTime
   leftAt    DateTime?
   note      String?
   createdBy Int
-
-  user    User @relation(fields: [userId], references: [id], onDelete: Cascade)
-  creator User @relation("AttendanceCreator", fields: [createdBy], references: [id])
+  creator   User      @relation("AttendanceCreator", fields: [createdBy], references: [id])
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@map("attendance")
 }
 
 model Product {
-  id        Int      @id @default(autoincrement())
-  name      String   @unique
-  image     String?
-  buyPrice  Decimal  @db.Decimal(10, 2)
-  sellPrice Decimal  @db.Decimal(10, 2)
-  createdBy Int
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
+  id           Int           @id @default(autoincrement())
+  name         String        @unique
+  image        String?
+  buyPrice     Float
+  sellPrice    Float
+  createdBy    Int
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
   creator      User          @relation(fields: [createdBy], references: [id])
   transactions Transaction[]
 
@@ -88,16 +70,15 @@ model Product {
 }
 
 model Transaction {
-  id        Int             @id @default(autoincrement())
+  id        Int      @id @default(autoincrement())
   productId Int
-  type      TransactionType
+  type      String
   quantity  Int
   note      String?
   createdBy Int
-  createdAt DateTime        @default(now())
-
-  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
-  creator User    @relation(fields: [createdBy], references: [id])
+  createdAt DateTime @default(now())
+  creator   User     @relation(fields: [createdBy], references: [id])
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
 
   @@map("transactions")
 }
@@ -106,11 +87,31 @@ model Notification {
   id        Int      @id @default(autoincrement())
   title     String
   body      String
+  type      String   @default("SYSTEM")
+  image     String?
+  file      String?
+  fileName  String?
   createdBy Int
   createdAt DateTime @default(now())
   isRead    Boolean  @default(false)
-
-  creator User @relation(fields: [createdBy], references: [id])
+  creator   User     @relation(fields: [createdBy], references: [id])
 
   @@map("notifications")
+}
+
+model Message {
+  id             Int       @id @default(autoincrement())
+  body           String
+  image          String?
+  file           String?
+  fileName       String?
+  replyTo        Int?
+  seenBy         String    @default("")
+  createdBy      Int
+  createdAt      DateTime  @default(now())
+  replyToMessage Message?  @relation("MessageReplies", fields: [replyTo], references: [id])
+  replies        Message[] @relation("MessageReplies")
+  creator        User      @relation(fields: [createdBy], references: [id])
+
+  @@map("messages")
 }

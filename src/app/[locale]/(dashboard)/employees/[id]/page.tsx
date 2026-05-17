@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
-import { motion } from 'framer-motion';
 import { ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
 import Button from '@/components/ui/Button';
@@ -69,7 +68,7 @@ export default function EmployeeDetailPage() {
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {/* Profile Card */}
-        <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
+        <div className="animate-fadeIn">
           <Card>
             <div className="flex flex-col items-center text-center gap-4">
               {employee.avatar ? (
@@ -107,15 +106,10 @@ export default function EmployeeDetailPage() {
               </div>
             </div>
           </Card>
-        </motion.div>
+        </div>
 
         {/* Stats */}
-        <motion.div
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.1 }}
-          className="md:col-span-2 space-y-4"
-        >
+        <div className="md:col-span-2 space-y-4 animate-fadeIn" style={{ animationDelay: '100ms' }}>
           <div className="grid grid-cols-2 gap-4">
             <Card>
               <p className="text-sm text-gray-500">Jami tranzaksiyalar</p>
@@ -126,7 +120,7 @@ export default function EmployeeDetailPage() {
               <p className="text-2xl font-bold text-gray-900 mt-1">{employee.attendances.length}</p>
             </Card>
           </div>
-        </motion.div>
+        </div>
       </div>
 
       {/* Attendance */}

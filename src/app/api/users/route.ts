@@ -18,11 +18,34 @@ export async function GET() {
       address: true,
       avatar: true,
       createdAt: true,
+      transactions: {
+        select: {
+          type: true,
+          quantity: true,
+        },
+      },
     },
     orderBy: { createdAt: 'desc' },
   });
 
-  return NextResponse.json(users);
+  // Calculate statistics for each user
+  const usersWithStats = users.map((user) => {
+    const totalIncome = user.transactions
+      .filter((t) => t.type === 'KIRIM')
+      .reduce((sum, t) => sum + t.quantity, 0);
+    const totalExpense = user.transactions
+      .filter((t) => t.type === 'CHIQIM')
+      .reduce((sum, t) => sum + t.quantity, 0);
+
+    const { transactions, ...userWithoutTransactions } = user;
+    return {
+      ...userWithoutTransactions,
+      totalIncome,
+      totalExpense,
+    };
+  });
+
+  return NextResponse.json(usersWithStats);
 }
 
 export async function POST(req: NextRequest) {

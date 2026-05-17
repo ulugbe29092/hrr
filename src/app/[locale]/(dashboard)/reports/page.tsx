@@ -1,9 +1,8 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useTranslations } from 'next-intl';
+import { useTranslations } from '@/hooks/useTranslations';
 import { useSearchParams, useRouter, usePathname } from 'next/navigation';
-import { motion } from 'framer-motion';
 import { FileText, FileSpreadsheet, TrendingUp, TrendingDown, DollarSign } from 'lucide-react';
 import Button from '@/components/ui/Button';
 import Card from '@/components/ui/Card';
@@ -160,7 +159,7 @@ export default function ReportsPage() {
           <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-primary-600" />
         </div>
       ) : data ? (
-        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-6">
+        <div className="space-y-6 animate-fadeIn">
           {/* Summary Cards */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <Card>
@@ -255,7 +254,7 @@ export default function ReportsPage() {
               </Tbody>
             </Table>
           </Card>
-        </motion.div>
+        </div>
       ) : (
         <p className="text-gray-500 text-center py-12">Ma'lumot topilmadi</p>
       )}

@@ -39,60 +39,47 @@ export default function Sidebar({ locale }: { locale: string }) {
   const navItems: NavItem[] = [
     {
       href: `/${locale}/dashboard`,
-      label: t('dashboard'),
+      label: 'Boshqaruv paneli',
       icon: <LayoutDashboard size={20} />,
     },
     {
+      href: `/${locale}/statistics`,
+      label: 'Statistika',
+      icon: <FileText size={20} />,
+    },
+    {
       href: `/${locale}/products`,
-      label: t('products'),
+      label: 'Mahsulotlar',
       icon: <Package size={20} />,
     },
     {
       href: `/${locale}/transactions`,
-      label: t('transactions'),
+      label: 'Kirim-Chiqim',
       icon: <ArrowDownUp size={20} />,
     },
     {
-      href: `/${locale}/employees`,
-      label: t('employees'),
+      href: `/${locale}/admin/users`,
+      label: 'Xodimlar',
       icon: <Users size={20} />,
-      roles: ['ADMIN', 'BOSHLIQ'],
     },
     {
       href: `/${locale}/attendance`,
-      label: t('attendance'),
+      label: 'Davomat',
       icon: <Calendar size={20} />,
-      roles: ['ADMIN', 'BOSHLIQ'],
     },
     {
       href: `/${locale}/reports`,
-      label: t('reports'),
+      label: 'Hisobotlar',
       icon: <FileText size={20} />,
-      roles: ['ADMIN', 'BOSHLIQ'],
-    },
-    {
-      href: `/${locale}/notifications`,
-      label: t('notifications'),
-      icon: <Bell size={20} />,
-      badge: unreadCount,
     },
     {
       href: `/${locale}/profile`,
-      label: t('profile'),
+      label: 'Profil',
       icon: <User size={20} />,
-    },
-    {
-      href: `/${locale}/admin/users`,
-      label: t('admin'),
-      icon: <Settings size={20} />,
-      roles: ['ADMIN'],
     },
   ];
 
-  const filteredNavItems = navItems.filter((item) => {
-    if (!item.roles) return true;
-    return item.roles.includes(session?.user?.role || '');
-  });
+  const filteredNavItems = navItems;
 
   return (
     <aside className="w-64 bg-white border-r border-gray-200 min-h-screen flex flex-col">
@@ -108,7 +95,7 @@ export default function Sidebar({ locale }: { locale: string }) {
           </div>
           <div>
             <h2 className="text-lg font-bold text-gray-900">Do'kon Tizimi</h2>
-            <p className="text-xs text-gray-500">Boshqaruv paneli</p>
+            <p className="text-xs text-gray-500">Xodimlar</p>
           </div>
         </div>
       </div>

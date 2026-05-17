@@ -2,7 +2,6 @@
 
 import { useState } from 'react';
 import { useRouter, useParams } from 'next/navigation';
-import { motion } from 'framer-motion';
 import { ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
 import { useForm } from 'react-hook-form';
@@ -77,7 +76,7 @@ export default function AddUserPage() {
         <h1 className="text-3xl font-bold text-gray-900">Yangi foydalanuvchi qo'shish</h1>
       </div>
 
-      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
+      <div className="animate-fadeIn">
         <Card>
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
             <Input
@@ -131,7 +130,7 @@ export default function AddUserPage() {
             </div>
           </form>
         </Card>
-      </motion.div>
+      </div>
 
       <ToastContainer toasts={toasts} onRemove={removeToast} />
     </div>

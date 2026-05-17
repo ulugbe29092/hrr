@@ -2,8 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter, useParams } from 'next/navigation';
-import { useTranslations } from 'next-intl';
-import { motion } from 'framer-motion';
+import { useTranslations } from '@/hooks/useTranslations';
 import { ArrowLeft, Upload } from 'lucide-react';
 import Link from 'next/link';
 import { useForm } from 'react-hook-form';
@@ -77,7 +76,10 @@ export default function AddProductPage() {
 
       if (res.ok) {
         addToast('Mahsulot muvaffaqiyatli qo\'shildi', 'success');
-        setTimeout(() => router.push(`/${locale}/products`), 1500);
+        setTimeout(() => {
+          addToast('Kirim/Chiqimga o\'tilmoqda...', 'info');
+        }, 1500);
+        setTimeout(() => router.push(`/${locale}/transactions/income`), 5000);
       } else {
         const err = await res.json();
         addToast(err.error || 'Xatolik yuz berdi', 'error');
@@ -100,7 +102,7 @@ export default function AddProductPage() {
         <h1 className="text-3xl font-bold text-gray-900">{t('addProduct')}</h1>
       </div>
 
-      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
+      <div className="animate-fadeIn">
         <Card>
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
             {/* Rasm yuklash */}
@@ -170,7 +172,7 @@ export default function AddProductPage() {
             </div>
           </form>
         </Card>
-      </motion.div>
+      </div>
 
       <ToastContainer toasts={toasts} onRemove={removeToast} />
     </div>

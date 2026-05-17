@@ -1,7 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { useEffect } from 'react';
 import { CheckCircle, XCircle, AlertCircle, X } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -33,12 +32,9 @@ export default function Toast({ message, type, onClose, duration = 4000 }: Toast
   };
 
   return (
-    <motion.div
-      initial={{ opacity: 0, x: 100 }}
-      animate={{ opacity: 1, x: 0 }}
-      exit={{ opacity: 0, x: 100 }}
+    <div
       className={cn(
-        'flex items-center gap-3 px-4 py-3 rounded-lg border shadow-lg max-w-sm',
+        'flex items-center gap-3 px-4 py-3 rounded-lg border shadow-lg max-w-sm animate-slideInRight',
         styles[type]
       )}
     >
@@ -47,7 +43,7 @@ export default function Toast({ message, type, onClose, duration = 4000 }: Toast
       <button onClick={onClose} className="text-gray-400 hover:text-gray-600">
         <X size={16} />
       </button>
-    </motion.div>
+    </div>
   );
 }
 
@@ -66,16 +62,14 @@ interface ToastContainerProps {
 export function ToastContainer({ toasts, onRemove }: ToastContainerProps) {
   return (
     <div className="fixed bottom-4 right-4 z-50 flex flex-col gap-2">
-      <AnimatePresence>
-        {toasts.map((toast) => (
-          <Toast
-            key={toast.id}
-            message={toast.message}
-            type={toast.type}
-            onClose={() => onRemove(toast.id)}
-          />
-        ))}
-      </AnimatePresence>
+      {toasts.map((toast) => (
+        <Toast
+          key={toast.id}
+          message={toast.message}
+          type={toast.type}
+          onClose={() => onRemove(toast.id)}
+        />
+      ))}
     </div>
   );
 }

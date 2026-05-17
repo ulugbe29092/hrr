@@ -3,7 +3,6 @@
 import { useEffect, useState } from 'react';
 import { useTranslations } from '@/hooks/useTranslations';
 import { useParams } from 'next/navigation';
-import { motion } from 'framer-motion';
 import {
   Users, Package, TrendingUp, TrendingDown,
   DollarSign, Activity, LayoutGrid, Bell,
@@ -43,6 +42,9 @@ export default function DashboardPage() {
       .then((r) => r.json())
       .then(setData)
       .finally(() => setLoading(false));
+    
+    // Check stock levels automatically
+    fetch('/api/check-stock').catch(() => {});
   }, []);
 
   const statCards = data
@@ -72,11 +74,10 @@ export default function DashboardPage() {
       {/* Stat Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
         {statCards.map((stat, i) => (
-          <motion.div
+          <div
             key={stat.title}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: i * 0.07 }}
+            className="animate-fadeIn"
+            style={{ animationDelay: `${i * 70}ms` }}
           >
             <Card className="hover:shadow-lg transition-shadow cursor-default">
               <div className="flex items-center justify-between">
@@ -87,41 +88,47 @@ export default function DashboardPage() {
                 <div className={`p-3 rounded-xl ${stat.bg}`}>{stat.icon}</div>
               </div>
             </Card>
-          </motion.div>
+          </div>
         ))}
       </div>
 
       {/* Bottom Row */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Recent Notifications */}
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5 }}>
-          <Card title={t('recentNotifications')}>
-            {data?.recentNotifications.length === 0 ? (
+        {/* Employees */}
+        <div className="animate-fadeIn" style={{ animationDelay: '500ms' }}>
+          <Card title="Xodimlar">
+            {!data?.recentNotifications || data.recentNotifications.length === 0 ? (
               <div className="flex flex-col items-center py-6 text-gray-400">
-                <Bell size={32} className="mb-2 opacity-30" />
-                <p className="text-sm">Bildirishnoma yo'q</p>
+                <Users size={32} className="mb-2 opacity-30" />
+                <p className="text-sm">Xodim yo'q</p>
               </div>
             ) : (
               <div className="space-y-3">
-                {data?.recentNotifications.map((n) => (
-                  <div key={n.id} className="flex gap-3 p-3 bg-gray-50 rounded-lg">
-                    <div className="w-2 h-2 rounded-full bg-blue-500 mt-1.5 flex-shrink-0" />
-                    <div>
-                      <p className="font-medium text-sm text-gray-900">{n.title}</p>
-                      <p className="text-xs text-gray-500 mt-0.5">{n.body}</p>
+                {data.recentNotifications.map((employee: any) => (
+                  <div key={employee.id} className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
+                    {employee.avatar ? (
+                      <img src={employee.avatar} alt={employee.fullName} className="w-10 h-10 rounded-full object-cover" />
+                    ) : (
+                      <div className="w-10 h-10 rounded-full bg-primary-100 flex items-center justify-center text-primary-700 font-bold text-sm">
+                        {employee.fullName?.[0] || '?'}
+                      </div>
+                    )}
+                    <div className="flex-1">
+                      <p className="font-medium text-sm text-gray-900">{employee.fullName}</p>
+                      <p className="text-xs text-gray-500">{employee.role}</p>
                     </div>
                   </div>
                 ))}
-                <Link href={`/${locale}/notifications`} className="block text-center text-sm text-primary-600 hover:underline pt-1">
+                <Link href={`/${locale}/admin/users`} className="block text-center text-sm text-primary-600 hover:underline pt-1">
                   Barchasini ko'rish →
                 </Link>
               </div>
             )}
           </Card>
-        </motion.div>
+        </div>
 
         {/* Recent Transactions */}
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.6 }}>
+        <div className="animate-fadeIn" style={{ animationDelay: '600ms' }}>
           <Card title={t('recentTransactions')}>
             {data?.recentTransactions.length === 0 ? (
               <p className="text-sm text-gray-400 text-center py-6">Tranzaksiya yo'q</p>
@@ -145,7 +152,7 @@ export default function DashboardPage() {
               </div>
             )}
           </Card>
-        </motion.div>
+        </div>
       </div>
     </div>
   );

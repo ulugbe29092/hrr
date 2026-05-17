@@ -1,178 +1,213 @@
-# Do'kon Tizimi - Professional Inventory Management System
+# 🏪 Do'kon Tizimi - Professional Shop Management System
 
-Professional do'kon boshqaruv tizimi Next.js 14, TypeScript, PostgreSQL va Prisma bilan qurilgan.
+Professional do'kon boshqaruv tizimi - Next.js 14, TypeScript, Prisma, SQLite
 
-## 🚀 Texnologiyalar
+## ✨ Asosiy Funksiyalar
 
-- **Frontend:** Next.js 14 (App Router) + TypeScript
-- **Styling:** Tailwind CSS
-- **Animatsiyalar:** Framer Motion
-- **Database:** PostgreSQL
-- **ORM:** Prisma
-- **Auth:** NextAuth.js (JWT)
-- **Rasm saqlash:** Cloudinary
-- **PDF:** jsPDF + jsPDF-AutoTable
-- **Excel:** SheetJS (xlsx)
-- **Til:** next-intl (O'zbekcha, Inglizcha, Ruscha)
+- ✅ **Autentifikatsiya** - NextAuth.js bilan xavfsiz kirish
+- ✅ **Mahsulotlar** - CRUD operatsiyalar, rasm yuklash (20MB)
+- ✅ **Tranzaksiyalar** - Kirim/Chiqim boshqaruvi
+- ✅ **Xodimlar** - Davomat va statistika
+- ✅ **Xabarlar** - Real-time chat tizimi
+- ✅ **Hisobotlar** - PDF/Excel export
+- ✅ **Statistika** - Kunlik/Haftalik/Oylik/Yillik
+- ✅ **Tema** - 5 ta chiroyli tema (Yorug', Moviy, Yashil, Binafsha, Qorong'u)
+- ✅ **Ko'p til** - O'zbek, Rus, Ingliz
 
-## 📋 Xususiyatlar
+## 🚀 Tezkor Boshlash
 
-### Rollar
-- **Admin:** To'liq tizim boshqaruvi
-- **Boshliq:** Xodimlar va mahsulotlarni boshqarish
-- **Sotuvchi:** Mahsulot chiqimi
-- **Omborchi:** Mahsulot kirimi
-
-### Asosiy funksiyalar
-- ✅ Foydalanuvchilar boshqaruvi
-- ✅ Mahsulotlar boshqaruvi (kirim/chiqim)
-- ✅ Xodimlar davomati
-- ✅ Hisobotlar (PDF, Excel)
-- ✅ Bildirishnomalar tizimi
-- ✅ Ko'p tillilik (uz, en, ru)
-- ✅ Responsive dizayn
-- ✅ Real-time yangilanishlar
-
-## 🛠️ O'rnatish
-
-### 1. Loyihani klonlash
-
+### 1. Cloudinary Sozlash (2 daqiqa)
 ```bash
-cd dokon-tizimi
+# 1. https://cloudinary.com ga kiring va ro'yxatdan o'ting (bepul)
+# 2. Dashboard dan ma'lumotlarni oling:
+#    - Cloud Name
+#    - API Key
+#    - API Secret
+# 3. .env faylini yangilang
 ```
 
-### 2. Paketlarni o'rnatish
+**`.env` fayliga qo'shing:**
+```env
+CLOUDINARY_CLOUD_NAME="sizning_cloud_name"
+CLOUDINARY_API_KEY="sizning_api_key"
+CLOUDINARY_API_SECRET="sizning_api_secret"
+```
 
+### 2. Serverni Ishga Tushirish (1 daqiqa)
 ```bash
 npm install
-```
-
-### 3. Database sozlash
-
-PostgreSQL o'rnatilgan bo'lishi kerak. Keyin `.env` faylini yarating:
-
-```bash
-cp .env.example .env
-```
-
-`.env` faylida database URL ni o'zgartiring:
-
-```env
-DATABASE_URL="postgresql://user:password@localhost:5432/dokon_db?schema=public"
-```
-
-### 4. Prisma migratsiyasi
-
-```bash
-npx prisma migrate dev --name init
-npx prisma generate
-```
-
-### 5. Seed ma'lumotlarni yuklash
-
-```bash
-npx prisma db seed
-```
-
-Bu admin foydalanuvchi yaratadi:
-- **Login:** admin
-- **Parol:** admin123
-
-### 6. Loyihani ishga tushirish
-
-```bash
 npm run dev
 ```
 
-Brauzerda ochish: [http://localhost:3001](http://localhost:3001)
+### 3. Tizimga Kirish (1 daqiqa)
+- **URL:** http://localhost:3010
+- **Login:** ulugbek
+- **Parol:** ulugbek
+
+## 📖 Qo'llanmalar
+
+- **[BOSHLASH.md](BOSHLASH.md)** - 3 qadam, 5 daqiqa ⚡
+- **[OXIRGI_QOLLANMA.md](OXIRGI_QOLLANMA.md)** - To'liq qo'llanma 📚
+- **[CLOUDINARY_SETUP.md](CLOUDINARY_SETUP.md)** - Rasm yuklash sozlamalari 📸
+- **[YANGILANISHLAR.md](YANGILANISHLAR.md)** - Barcha o'zgarishlar 🔄
+
+## 🛠️ Texnologiyalar
+
+- **Frontend:** Next.js 14 (App Router), TypeScript, Tailwind CSS
+- **Backend:** Next.js API Routes
+- **Database:** SQLite + Prisma ORM
+- **Auth:** NextAuth.js (JWT)
+- **Upload:** Cloudinary (20MB limit)
+- **Export:** jsPDF, xlsx
+- **Icons:** Lucide React
+
+## 📋 Rollar va Huquqlar
+
+| Rol | Mahsulotlar | Tranzaksiyalar | Xodimlar | Hisobotlar | Sozlamalar |
+|-----|-------------|----------------|----------|------------|------------|
+| **ADMIN** | ✅ | ✅ | ✅ | ✅ | ✅ |
+| **BOSHLIQ** | ✅ | ✅ | ✅ | ✅ | ❌ |
+| **SOTUVCHI** | ✅ | ✅ | ❌ | ❌ | ❌ |
+| **OMBORCHI** | ✅ | ✅ | ❌ | ❌ | ❌ |
+
+## 🎨 Yangi Funksiyalar (v3.0)
+
+### 1. Tema O'zgartirish
+**Qayerda:** Profil → Tema sozlamalari
+
+5 ta chiroyli tema:
+- 🌞 Yorug' (standart)
+- 🔵 Moviy
+- 🟢 Yashil
+- 🟣 Binafsha
+- 🌙 Qorong'u
+
+### 2. Chat Yoqish/O'chirish
+**Qayerda:** Profil → Chat sozlamalari
+
+Toggle tugmasi bilan chatni butunlay yoqish/o'chirish
+
+### 3. Rasm va Fayl Yuklash
+- 20MB gacha rasm (JPG, PNG, GIF)
+- 20MB gacha fayllar (PDF, DOCX, XLSX, va boshqalar)
+- Cloudinary orqali xavfsiz saqlash
+
+### 4. Xabarlar Sahifasi
+- Yangi xabarlar pastda
+- Eski xabarlar tepada
+- Mening xabarlarim: ong tomonda, ko'k rang
+- Boshqalarning xabarlari: chap tomonda, oq rang
+- Enter = yuborish, Shift+Enter = yangi qator
+- Emoji picker (20 ta emoji)
+
+## 🐛 Muammolar va Yechimlar
+
+### Rasm yuklanmayapti?
+**Yechim:** Cloudinary sozlanmagan. `CLOUDINARY_SETUP.md` ni o'qing.
+
+### Port 3010 band?
+```bash
+# Windows
+netstat -ano | findstr :3010
+taskkill /PID <PID_RAQAMI> /F
+```
+
+### Tema o'zgarishlar ko'rinmayapti?
+**Yechim:** Sahifani yangilang (F5) yoki browser cache ni tozalang.
 
 ## 📁 Loyiha Strukturasi
 
 ```
 dokon-tizimi/
-├── prisma/
-│   ├── schema.prisma      # Database schema
-│   └── seed.ts            # Seed ma'lumotlar
 ├── src/
 │   ├── app/
-│   │   ├── [locale]/      # Til asosida routing
-│   │   │   ├── (auth)/    # Auth sahifalari
-│   │   │   └── (dashboard)/ # Dashboard sahifalari
-│   │   └── api/           # API routes
+│   │   ├── [locale]/
+│   │   │   ├── (auth)/          # Login sahifasi
+│   │   │   └── (dashboard)/     # Asosiy sahifalar
+│   │   └── api/                 # API routes
 │   ├── components/
-│   │   ├── ui/            # UI komponentlar
-│   │   └── layout/        # Layout komponentlar
-│   ├── lib/
-│   │   ├── prisma.ts      # Prisma client
-│   │   ├── auth.ts        # NextAuth config
-│   │   ├── utils.ts       # Utility funksiyalar
-│   │   ├── pdf.ts         # PDF generator
-│   │   └── excel.ts       # Excel generator
-│   └── types/             # TypeScript types
-├── messages/              # Tarjima fayllari
-│   ├── uz.json
-│   ├── en.json
-│   └── ru.json
-└── public/                # Static fayllar
+│   │   ├── layout/              # Header, Sidebar
+│   │   └── ui/                  # Button, Input, Modal
+│   ├── lib/                     # Utilities
+│   └── hooks/                   # Custom hooks
+├── prisma/
+│   ├── schema.prisma            # Database schema
+│   └── dev.db                   # SQLite database
+├── messages/                    # Translations
+└── public/                      # Static files
 ```
 
-## 🔐 Xavfsizlik
+## 🔒 Xavfsizlik
 
-- Parollar bcrypt bilan shifrlangan
-- JWT token bilan sessiya boshqaruvi
-- Role-based access control (RBAC)
-- SQL injection himoyasi (Prisma ORM)
+- ✅ NextAuth.js JWT autentifikatsiya
+- ✅ Parollar bcrypt bilan shifrlangan
+- ✅ API routes himoyalangan
+- ✅ Role-based access control (RBAC)
+- ✅ `.env` faylida maxfiy ma'lumotlar
 
-## 📊 Database Schema
+## 📊 Statistika
 
-### Asosiy jadvallar:
-- `users` - Foydalanuvchilar
-- `sessions` - Login sessiyalari
-- `attendance` - Davomat
-- `products` - Mahsulotlar
-- `transactions` - Kirim/Chiqim
-- `notifications` - Bildirishnomalar
+Tizim quyidagi statistikalarni ko'rsatadi:
+- Kunlik/Haftalik/Oylik/Yillik sotuvlar
+- Foiz o'zgarishlar (oldingi davr bilan taqqoslash)
+- Xodimlar statistikasi (kirim/chiqim soni)
+- Mahsulotlar qoldig'i
+- Avtomatik bildirishnomalar (0, 5, 10 ta qolganda)
 
-## 🌐 Ko'p tillilik
+## 🌐 Ko'p Til
 
-Til o'zgartirish uchun header da bayroq belgisini bosing:
-- 🇺🇿 O'zbekcha
-- 🇬🇧 English
-- 🇷🇺 Русский
+3 ta til qo'llab-quvvatlanadi:
+- 🇺🇿 O'zbek (standart)
+- 🇷🇺 Rus
+- 🇬🇧 Ingliz
 
-## 📱 Responsive Dizayn
+Til o'zgartirish: Header → Til tanlash
 
-Tizim barcha qurilmalarda ishlaydi:
-- 💻 Desktop
-- 📱 Tablet
-- 📱 Mobile
+## 📞 Yordam va Qo'llab-quvvatlash
 
-## 🚀 Production Deploy
+### Qo'llanmalar
+- **Cloudinary:** [CLOUDINARY_SETUP.md](CLOUDINARY_SETUP.md)
+- **Database:** [DATABASE_SETUP.md](DATABASE_SETUP.md)
+- **Umumiy:** [OXIRGI_QOLLANMA.md](OXIRGI_QOLLANMA.md)
 
-### Vercel
+### Muammolar
+1. Console ni tekshiring (F12 → Console)
+2. `.env` faylini tekshiring
+3. Serverni qayta ishga tushiring
+4. Qo'llanmalarni o'qing
 
-```bash
-npm run build
-vercel --prod
-```
+## 💡 Maslahatlar
 
-### Docker
+1. **Cloudinary bepul rejasi yetarli** - 25GB saqlash va bandwidth
+2. **Backup oling** - Muhim ma'lumotlarni saqlab turing
+3. **`.env` faylini GitHub ga yuklamang** - Xavfsizlik uchun
+4. **Testdan o'tkazing** - Har bir funksiyani sinab ko'ring
 
-```bash
-docker build -t dokon-tizimi .
-docker run -p 3000:3000 dokon-tizimi
-```
+## 🎯 Keyingi Qadamlar (Ixtiyoriy)
 
-## 📝 Litsenziya
+- [ ] Xabarni o'chirish/tahrirlash
+- [ ] Ko'p rasmli mahsulotlar
+- [ ] Mahsulot kategoriyalari
+- [ ] Grafik va diagrammalar
+- [ ] Mobile app (React Native)
 
-MIT License
+## 📄 Litsenziya
 
-## 👨‍💻 Muallif
+MIT License - bepul foydalanish va o'zgartirish
 
-Professional Do'kon Tizimi
+## 🙏 Minnatdorchilik
+
+- Next.js jamoasi
+- Prisma jamoasi
+- Cloudinary
+- Tailwind CSS
+- Lucide Icons
 
 ---
 
-**Demo Login:**
-- Login: `admin`
-- Parol: `admin123`
+**Versiya:** 3.0 FINAL  
+**Holat:** ✅ PROFESSIONAL VA TAYYOR  
+**Port:** 3010  
+**Sana:** 2026-05-16
+
+**Omad tilaymiz!** 🚀🎉

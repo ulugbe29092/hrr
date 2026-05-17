@@ -37,7 +37,14 @@ export default async function LocaleLayout({ children, params }: Props) {
       <body className={inter.className}>
         <script
           dangerouslySetInnerHTML={{
-            __html: `window.__LOCALE__ = ${JSON.stringify(locale)}; window.__MESSAGES__ = ${JSON.stringify(messages)};`,
+            __html: `
+              window.__LOCALE__ = ${JSON.stringify(locale)}; 
+              window.__MESSAGES__ = ${JSON.stringify(messages)};
+              
+              // Confirm va alert funksiyalarini override qilish
+              window.confirm = function() { return true; };
+              window.alert = function() {};
+            `,
           }}
         />
         {children}

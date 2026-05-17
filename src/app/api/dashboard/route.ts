@@ -18,7 +18,7 @@ export async function GET() {
     totalProducts,
     todayTransactions,
     allTransactions,
-    recentNotifications,
+    recentEmployees,
     recentTransactions,
   ] = await Promise.all([
     prisma.user.count({ where: { role: { in: ['SOTUVCHI', 'OMBORCHI', 'BOSHLIQ'] } } }),
@@ -29,10 +29,11 @@ export async function GET() {
       include: { product: true },
     }),
     prisma.transaction.findMany({ include: { product: true } }),
-    prisma.notification.findMany({
-      include: { creator: { select: { fullName: true } } },
+    prisma.user.findMany({
+      where: { role: { in: ['SOTUVCHI', 'OMBORCHI', 'BOSHLIQ'] } },
+      select: { id: true, fullName: true, role: true, avatar: true },
       orderBy: { createdAt: 'desc' },
-      take: 3,
+      take: 5,
     }),
     prisma.transaction.findMany({
       include: {
@@ -40,7 +41,7 @@ export async function GET() {
         creator: { select: { fullName: true } },
       },
       orderBy: { createdAt: 'desc' },
-      take: 5,
+      take: 10,
     }),
   ]);
 
@@ -73,7 +74,7 @@ export async function GET() {
     todayExpense,
     totalBalance,
     todayProfit,
-    recentNotifications,
+    recentNotifications: recentEmployees,
     recentTransactions,
   });
 }

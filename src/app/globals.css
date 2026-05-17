@@ -2,9 +2,19 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --color-primary: 59 130 246;
+  --color-primary-dark: 37 99 235;
+  --color-bg: 255 255 255;
+  --color-bg-secondary: 249 250 251;
+  --color-text: 17 24 39;
+  --color-border: 229 231 235;
+}
+
 @layer base {
   * {
     @apply border-gray-200;
+    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
   }
   
   body {
@@ -22,33 +32,46 @@
     display: none;
   }
   
-  .animate-fade-in {
-    animation: fadeIn 0.5s ease-in-out;
+  .animate-fadeIn {
+    animation: fadeIn 0.2s ease-out;
   }
   
-  .delay-1000 {
-    animation-delay: 1s;
+  .animate-scaleIn {
+    animation: scaleIn 0.15s ease-out;
+  }
+  
+  .animate-slideInRight {
+    animation: slideInRight 0.2s ease-out;
   }
   
   @keyframes fadeIn {
     from {
       opacity: 0;
-      transform: translateY(20px);
     }
     to {
       opacity: 1;
-      transform: translateY(0);
     }
   }
   
-  @keyframes pulse {
-    0%, 100% {
-      opacity: 0.1;
+  @keyframes scaleIn {
+    from {
+      opacity: 0;
+      transform: scale(0.95);
+    }
+    to {
+      opacity: 1;
       transform: scale(1);
     }
-    50% {
-      opacity: 0.15;
-      transform: scale(1.05);
+  }
+  
+  @keyframes slideInRight {
+    from {
+      opacity: 0;
+      transform: translateX(50px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
     }
   }
 }

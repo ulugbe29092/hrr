@@ -10,12 +10,16 @@ export async function uploadImage(file: File): Promise<string> {
   const arrayBuffer = await file.arrayBuffer();
   const buffer = Buffer.from(arrayBuffer);
 
+  // Fayl turini aniqlash
+  const isImage = file.type.startsWith('image/');
+  const resourceType = isImage ? 'image' : 'raw';
+
   return new Promise((resolve, reject) => {
     cloudinary.uploader
       .upload_stream(
         {
           folder: 'dokon-tizimi',
-          resource_type: 'image',
+          resource_type: resourceType as 'image' | 'raw' | 'video' | 'auto',
         },
         (error, result) => {
           if (error) reject(error);

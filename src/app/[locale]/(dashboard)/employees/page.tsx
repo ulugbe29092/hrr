@@ -1,10 +1,9 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useTranslations } from 'next-intl';
+import { useTranslations } from '@/hooks/useTranslations';
 import { useParams } from 'next/navigation';
 import { useSession } from 'next-auth/react';
-import { motion } from 'framer-motion';
 import { Plus, Eye, Edit, Trash2 } from 'lucide-react';
 import Link from 'next/link';
 import Button from '@/components/ui/Button';
@@ -45,7 +44,12 @@ export default function EmployeesPage() {
   const fetchEmployees = async () => {
     try {
       const res = await fetch('/api/users');
-      if (res.ok) setEmployees(await res.json());
+      if (res.ok) {
+        const data = await res.json();
+        // Exclude current user (admin) from employees list
+        const filtered = data.filter((u: Employee) => u.id !== parseInt(session?.user?.id || '0'));
+        setEmployees(filtered);
+      }
     } finally {
       setLoading(false);
     }
@@ -96,28 +100,30 @@ export default function EmployeesPage() {
           <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-primary-600" />
         </div>
       ) : (
-        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+        <div className="animate-fadeIn">
           <Table>
             <Thead>
               <Tr>
                 <Th>#</Th>
                 <Th>{t('fullName')}</Th>
-                <Th>Login</Th>
+                {isAdmin && <Th>Login</Th>}
                 <Th>{t('role')}</Th>
-                <Th>{t('phone')}</Th>
-                <Th>Qo'shilgan sana</Th>
+                {isAdmin && <Th>{t('phone')}</Th>}
+                <Th>Kirim</Th>
+                <Th>Chiqim</Th>
+                {isAdmin && <Th>Qo'shilgan</Th>}
                 <Th>Amallar</Th>
               </Tr>
             </Thead>
             <Tbody>
               {employees.length === 0 ? (
                 <Tr>
-                  <Td colSpan={7} className="text-center text-gray-500 py-8">
+                  <Td colSpan={isAdmin ? 9 : 6} className="text-center text-gray-500 py-8">
                     Xodim topilmadi
                   </Td>
                 </Tr>
               ) : (
-                employees.map((emp, i) => (
+                employees.map((emp: any, i) => (
                   <Tr key={emp.id}>
                     <Td className="text-gray-500">{i + 1}</Td>
                     <Td>
@@ -132,31 +138,32 @@ export default function EmployeesPage() {
                         <span className="font-medium">{emp.fullName}</span>
                       </div>
                     </Td>
-                    <Td className="text-gray-500">{emp.login}</Td>
+                    {isAdmin && <Td className="text-gray-500">{emp.login}</Td>}
                     <Td>
                       <Badge variant={roleVariant(emp.role)}>{getRoleName(emp.role)}</Badge>
                     </Td>
-                    <Td className="text-gray-500">{emp.phone || '—'}</Td>
-                    <Td className="text-gray-500">{formatDate(emp.createdAt)}</Td>
+                    {isAdmin && <Td className="text-gray-500">{emp.phone || '—'}</Td>}
+                    <Td>
+                      <Badge variant="success">{emp.totalIncome || 0} ta</Badge>
+                    </Td>
+                    <Td>
+                      <Badge variant="warning">{emp.totalExpense || 0} ta</Badge>
+                    </Td>
+                    {isAdmin && <Td className="text-gray-500">{formatDate(emp.createdAt)}</Td>}
                     <Td>
                       <div className="flex items-center gap-1">
                         <Link href={`/${locale}/employees/${emp.id}`}>
                           <Button variant="ghost" size="sm"><Eye size={16} /></Button>
                         </Link>
                         {isAdmin && (
-                          <>
-                            <Link href={`/${locale}/admin/users/${emp.id}/edit`}>
-                              <Button variant="ghost" size="sm"><Edit size={16} /></Button>
-                            </Link>
-                            <Button
-                              variant="ghost"
-                              size="sm"
-                              className="text-red-500 hover:text-red-700"
-                              onClick={() => setDeleteId(emp.id)}
-                            >
-                              <Trash2 size={16} />
-                            </Button>
-                          </>
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            className="text-red-500 hover:text-red-700"
+                            onClick={() => setDeleteId(emp.id)}
+                          >
+                            <Trash2 size={16} />
+                          </Button>
                         )}
                       </div>
                     </Td>
@@ -165,7 +172,7 @@ export default function EmployeesPage() {
               )}
             </Tbody>
           </Table>
-        </motion.div>
+        </div>
       )}
 
       {/* Delete Confirm Modal */}
