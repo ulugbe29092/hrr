@@ -7,12 +7,13 @@ Professional do'kon boshqaruv tizimi - Next.js 14, TypeScript, Prisma, SQLite
 - ✅ **Autentifikatsiya** - NextAuth.js bilan xavfsiz kirish
 - ✅ **Mahsulotlar** - CRUD operatsiyalar, rasm yuklash (20MB)
 - ✅ **Tranzaksiyalar** - Kirim/Chiqim boshqaruvi
-- ✅ **Xodimlar** - Davomat va statistika
+- ✅ **Xodimlar** - Davomat va statistika (kirim/chiqim tracking)
 - ✅ **Xabarlar** - Real-time chat tizimi
-- ✅ **Hisobotlar** - PDF/Excel export
+- ✅ **Hisobotlar** - PDF/Excel export (Statistika va Xodimlar)
 - ✅ **Statistika** - Kunlik/Haftalik/Oylik/Yillik
-- ✅ **Tema** - 5 ta chiroyli tema (Yorug', Moviy, Yashil, Binafsha, Qorong'u)
+- ✅ **Tema** - 20 ta chiroyli tema
 - ✅ **Ko'p til** - O'zbek, Rus, Ingliz
+- ✅ **Turbopack** - Tezkor development (3-4 soniya compilation)
 
 ## 🚀 Tezkor Boshlash
 
@@ -70,29 +71,57 @@ npm run dev
 | **SOTUVCHI** | ✅ | ✅ | ❌ | ❌ | ❌ |
 | **OMBORCHI** | ✅ | ✅ | ❌ | ❌ | ❌ |
 
-## 🎨 Yangi Funksiyalar (v3.0)
+## 🎨 Yangi Funksiyalar (v4.0)
 
-### 1. Tema O'zgartirish
+### 1. Xodimlar Statistikasi (Dashboard)
+**Qayerda:** Bosh sahifa → Xodimlar statistikasi
+
+Har bir xodim uchun:
+- ↑ Kirim tranzaksiyalari soni (yashil)
+- ↓ Chiqim tranzaksiyalari soni (qizil)
+- Σ Jami tranzaksiyalar (ko'k)
+- Avatar yoki bosh harf
+- Chiroyli gradient dizayn
+
+### 2. PDF/Excel Export
+**Statistika sahifasi:**
+- Excel (CSV) tugmasi - barcha statistika
+- PDF tugmasi - chiroyli hisobot
+
+**Xodimlar sahifasi:**
+- Excel (CSV) tugmasi - xodimlar ro'yxati
+- PDF tugmasi - xodimlar hisoboti
+
+### 3. Turbopack (Tezkor Development)
+- 3-4 soniya compilation
+- Tezkor hot reload
+- Optimallashtirilgan build
+
+### 4. Performance Optimizations
+- Xabarlar: Auto-refresh o'chirildi (faqat action'lardan keyin)
+- Dashboard: Parallel API calls
+- API: Try-catch error handling
+- React Strict Mode o'chirildi (ikki marta render yo'q)
+
+### 5. Tema O'zgartirish (20 ta tema)
 **Qayerda:** Profil → Tema sozlamalari
 
-5 ta chiroyli tema:
-- 🌞 Yorug' (standart)
-- 🔵 Moviy
-- 🟢 Yashil
-- 🟣 Binafsha
-- 🌙 Qorong'u
+20 ta chiroyli tema:
+- 🌞 Yorug', 🔵 Moviy, 🟢 Yashil, 🟣 Binafsha, 🌙 Qorong'u
+- 🔴 Qizil, 🟠 To'q sariq, 🟡 Sariq, 🟢 Yashil limon, 🔵 Ko'k
+- 🔵 Osmon, 🟣 Indigo, 🟣 Binafsha, 🌸 Pushti, 🌹 Atirgul
+- ⚫ Slate, ⚫ Kulrang, ⚫ Rux, 🟤 Tosh
 
-### 2. Chat Yoqish/O'chirish
+### 6. Chat Yoqish/O'chirish
 **Qayerda:** Profil → Chat sozlamalari
 
 Toggle tugmasi bilan chatni butunlay yoqish/o'chirish
-
-### 3. Rasm va Fayl Yuklash
+### 7. Rasm va Fayl Yuklash
 - 20MB gacha rasm (JPG, PNG, GIF)
 - 20MB gacha fayllar (PDF, DOCX, XLSX, va boshqalar)
 - Cloudinary orqali xavfsiz saqlash
 
-### 4. Xabarlar Sahifasi
+### 8. Xabarlar Sahifasi
 - Yangi xabarlar pastda
 - Eski xabarlar tepada
 - Mening xabarlarim: ong tomonda, ko'k rang
@@ -205,9 +234,10 @@ MIT License - bepul foydalanish va o'zgartirish
 
 ---
 
-**Versiya:** 3.0 FINAL  
-**Holat:** ✅ PROFESSIONAL VA TAYYOR  
+**Versiya:** 4.0 PROFESSIONAL  
+**Holat:** ✅ PRODUCTION READY  
 **Port:** 3010  
-**Sana:** 2026-05-16
+**Sana:** 2026-05-19  
+**GitHub:** https://github.com/ulugbe29092/hrr
 
 **Omad tilaymiz!** 🚀🎉
