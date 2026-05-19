@@ -55,9 +55,7 @@ export default function MessagesPage() {
 
   useEffect(() => {
     fetchMessages();
-    // Har 500ms (0.5 soniya) da yangilash - juda tez!
-    const interval = setInterval(fetchMessages, 500);
-    return () => clearInterval(interval);
+    // Auto-refresh o'chirildi - faqat action'lardan keyin yangilanadi
   }, []);
 
   useEffect(() => {

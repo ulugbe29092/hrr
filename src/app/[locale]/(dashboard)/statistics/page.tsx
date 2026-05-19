@@ -1,9 +1,10 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { TrendingUp, TrendingDown, Calendar, DollarSign, Package, Activity } from 'lucide-react';
+import { TrendingUp, TrendingDown, Calendar, DollarSign, Package, Activity, Download, FileText } from 'lucide-react';
 import Card from '@/components/ui/Card';
 import Badge from '@/components/ui/Badge';
+import Button from '@/components/ui/Button';
 import { Table, Thead, Tbody, Tr, Th, Td } from '@/components/ui/Table';
 import { formatCurrency, formatDateTime } from '@/lib/utils';
 
@@ -48,6 +49,125 @@ export default function StatisticsPage() {
     }
   };
 
+  const exportToCSV = () => {
+    if (!data) return;
+
+    const csvContent = [
+      ['Statistika Hisoboti', periodLabels[period]],
+      [''],
+      ['Jami sotuvlar', data.totalSales + ' ta'],
+      ['Jami kirim', data.totalIncome + ' ta'],
+      ['Jami chiqim', data.totalExpense + ' ta'],
+      ['Jami foyda', formatCurrency(data.totalProfit)],
+      [''],
+      ['Eng ko\'p sotilgan mahsulotlar'],
+      ['#', 'Mahsulot', 'Sotildi', 'Foyda'],
+      ...data.topProducts.map((p, i) => [
+        (i + 1).toString(),
+        p.name,
+        p.quantity + ' ta',
+        formatCurrency(p.profit),
+      ]),
+    ]
+      .map((row) => row.join(','))
+      .join('\n');
+
+    const blob = new Blob(['\uFEFF' + csvContent], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = `statistika_${period}_${new Date().toISOString().split('T')[0]}.csv`;
+    link.click();
+  };
+
+  const exportToPDF = () => {
+    if (!data) return;
+    
+    // Simple HTML to PDF approach
+    const printWindow = window.open('', '_blank');
+    if (!printWindow) return;
+
+    const html = `
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <meta charset="UTF-8">
+        <title>Statistika Hisoboti</title>
+        <style>
+          body { font-family: Arial, sans-serif; padding: 40px; }
+          h1 { color: #1f2937; margin-bottom: 10px; }
+          .period { color: #6b7280; margin-bottom: 30px; }
+          .stats { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; margin-bottom: 30px; }
+          .stat-card { border: 1px solid #e5e7eb; padding: 20px; border-radius: 8px; }
+          .stat-label { color: #6b7280; font-size: 14px; margin-bottom: 5px; }
+          .stat-value { font-size: 24px; font-weight: bold; color: #1f2937; }
+          table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+          th, td { border: 1px solid #e5e7eb; padding: 12px; text-align: left; }
+          th { background-color: #f3f4f6; font-weight: 600; }
+          .profit { color: #059669; font-weight: 600; }
+          @media print {
+            body { padding: 20px; }
+          }
+        </style>
+      </head>
+      <body>
+        <h1>Statistika Hisoboti</h1>
+        <div class="period">${periodLabels[period]} - ${new Date().toLocaleDateString('uz-UZ')}</div>
+        
+        <div class="stats">
+          <div class="stat-card">
+            <div class="stat-label">Jami sotuvlar</div>
+            <div class="stat-value">${data.totalSales} ta</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Jami kirim</div>
+            <div class="stat-value">${data.totalIncome} ta</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Jami chiqim</div>
+            <div class="stat-value">${data.totalExpense} ta</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Jami foyda</div>
+            <div class="stat-value profit">${formatCurrency(data.totalProfit)}</div>
+          </div>
+        </div>
+
+        <h2>Eng ko'p sotilgan mahsulotlar</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Mahsulot</th>
+              <th>Sotildi</th>
+              <th>Foyda</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${data.topProducts.map((p, i) => `
+              <tr>
+                <td>${i + 1}</td>
+                <td>${p.name}</td>
+                <td>${p.quantity} ta</td>
+                <td class="profit">${formatCurrency(p.profit)}</td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+
+        <script>
+          window.onload = () => {
+            window.print();
+            setTimeout(() => window.close(), 100);
+          };
+        </script>
+      </body>
+      </html>
+    `;
+
+    printWindow.document.write(html);
+    printWindow.document.close();
+  };
+
   const periodLabels = {
     daily: 'Kunlik',
     weekly: 'Haftalik',
@@ -68,21 +188,46 @@ export default function StatisticsPage() {
       <div className="flex items-center justify-between">
         <h1 className="text-3xl font-bold text-gray-900">Statistika</h1>
         
-        {/* Period Selector */}
-        <div className="flex gap-2">
-          {(['daily', 'weekly', 'monthly', 'yearly'] as Period[]).map((p) => (
-            <button
-              key={p}
-              onClick={() => setPeriod(p)}
-              className={`px-4 py-2 rounded-lg font-medium transition-colors ${
-                period === p
-                  ? 'bg-blue-600 text-white'
-                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-              }`}
-            >
-              {periodLabels[p]}
-            </button>
-          ))}
+        <div className="flex items-center gap-3">
+          {/* Export Buttons */}
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={exportToCSV}
+            disabled={!data}
+            className="flex items-center gap-2"
+          >
+            <Download size={16} />
+            Excel
+          </Button>
+          
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={exportToPDF}
+            disabled={!data}
+            className="flex items-center gap-2"
+          >
+            <FileText size={16} />
+            PDF
+          </Button>
+
+          {/* Period Selector */}
+          <div className="flex gap-2 ml-2">
+            {(['daily', 'weekly', 'monthly', 'yearly'] as Period[]).map((p) => (
+              <button
+                key={p}
+                onClick={() => setPeriod(p)}
+                className={`px-4 py-2 rounded-lg font-medium transition-colors ${
+                  period === p
+                    ? 'bg-blue-600 text-white'
+                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                }`}
+              >
+                {periodLabels[p]}
+              </button>
+            ))}
+          </div>
         </div>
       </div>
 

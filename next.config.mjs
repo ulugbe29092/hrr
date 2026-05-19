@@ -20,12 +20,15 @@ const nextConfig = {
   },
   // Performance optimizations
   swcMinify: true,
-  compiler: {
-    removeConsole: process.env.NODE_ENV === 'production',
-  },
   poweredByHeader: false,
-  reactStrictMode: true,
+  reactStrictMode: false, // Ikki marta render qilishni o'chirish
   compress: true,
+  // Turbopack uchun optimallashtirishlar
+  modularizeImports: {
+    'lucide-react': {
+      transform: 'lucide-react/dist/esm/icons/{{kebabCase member}}',
+    },
+  },
 };
 
 export default nextConfig;

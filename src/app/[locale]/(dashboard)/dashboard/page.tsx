@@ -5,7 +5,7 @@ import { useTranslations } from '@/hooks/useTranslations';
 import { useParams } from 'next/navigation';
 import {
   Users, Package, TrendingUp, TrendingDown,
-  DollarSign, Activity, LayoutGrid, Bell,
+  DollarSign, Activity, LayoutGrid,
 } from 'lucide-react';
 import Link from 'next/link';
 import Card from '@/components/ui/Card';
@@ -29,6 +29,15 @@ interface DashboardData {
     product: { name: string };
     creator: { fullName: string };
   }>;
+  employeesStats: Array<{
+    id: number;
+    fullName: string;
+    role: string;
+    avatar?: string;
+    kirim: number;
+    chiqim: number;
+    jami: number;
+  }>;
 }
 
 export default function DashboardPage() {
@@ -38,26 +47,26 @@ export default function DashboardPage() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch('/api/dashboard')
-      .then((r) => r.json())
-      .then(setData)
-      .finally(() => setLoading(false));
-    
-    // Check stock levels automatically
-    fetch('/api/check-stock').catch(() => {});
+    fetchData();
   }, []);
 
-  const statCards = data
-    ? [
-        { title: t('totalEmployees'), value: data.totalEmployees, icon: <Users className="w-7 h-7 text-blue-600" />, bg: 'bg-blue-50' },
-        { title: t('todayPresent'), value: data.todayPresent, icon: <Activity className="w-7 h-7 text-green-600" />, bg: 'bg-green-50' },
-        { title: t('totalProducts'), value: data.totalProducts, icon: <Package className="w-7 h-7 text-purple-600" />, bg: 'bg-purple-50' },
-        { title: t('todayIncome'), value: `${data.todayIncome} ta`, icon: <TrendingUp className="w-7 h-7 text-emerald-600" />, bg: 'bg-emerald-50' },
-        { title: t('todayExpense'), value: `${data.todayExpense} ta`, icon: <TrendingDown className="w-7 h-7 text-red-600" />, bg: 'bg-red-50' },
-        { title: t('totalBalance'), value: `${data.totalBalance} ta`, icon: <LayoutGrid className="w-7 h-7 text-orange-600" />, bg: 'bg-orange-50' },
-        { title: t('todayProfit'), value: formatCurrency(data.todayProfit), icon: <DollarSign className="w-7 h-7 text-yellow-600" />, bg: 'bg-yellow-50' },
-      ]
-    : [];
+  const fetchData = async () => {
+    try {
+      const [dashboardRes] = await Promise.all([
+        fetch('/api/dashboard'),
+        fetch('/api/check-stock'),
+      ]);
+      
+      if (dashboardRes.ok) {
+        const dashboardData = await dashboardRes.json();
+        setData(dashboardData);
+      }
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   if (loading) {
     return (
@@ -66,6 +75,24 @@ export default function DashboardPage() {
       </div>
     );
   }
+
+  if (!data) {
+    return (
+      <div className="flex items-center justify-center h-96">
+        <p className="text-gray-500">Ma'lumot yuklanmadi</p>
+      </div>
+    );
+  }
+
+  const statCards = [
+    { title: t('totalEmployees'), value: data.totalEmployees, icon: <Users className="w-7 h-7 text-blue-600" />, bg: 'bg-blue-50' },
+    { title: t('todayPresent'), value: data.todayPresent, icon: <Activity className="w-7 h-7 text-green-600" />, bg: 'bg-green-50' },
+    { title: t('totalProducts'), value: data.totalProducts, icon: <Package className="w-7 h-7 text-purple-600" />, bg: 'bg-purple-50' },
+    { title: t('todayIncome'), value: `${data.todayIncome} ta`, icon: <TrendingUp className="w-7 h-7 text-emerald-600" />, bg: 'bg-emerald-50' },
+    { title: t('todayExpense'), value: `${data.todayExpense} ta`, icon: <TrendingDown className="w-7 h-7 text-red-600" />, bg: 'bg-red-50' },
+    { title: t('totalBalance'), value: `${data.totalBalance} ta`, icon: <LayoutGrid className="w-7 h-7 text-orange-600" />, bg: 'bg-orange-50' },
+    { title: t('todayProfit'), value: formatCurrency(data.todayProfit), icon: <DollarSign className="w-7 h-7 text-yellow-600" />, bg: 'bg-yellow-50' },
+  ];
 
   return (
     <div className="space-y-6">
@@ -94,33 +121,48 @@ export default function DashboardPage() {
 
       {/* Bottom Row */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Employees */}
+        {/* Employees with Stats */}
         <div className="animate-fadeIn" style={{ animationDelay: '500ms' }}>
-          <Card title="Xodimlar">
-            {!data?.recentNotifications || data.recentNotifications.length === 0 ? (
-              <div className="flex flex-col items-center py-6 text-gray-400">
-                <Users size={32} className="mb-2 opacity-30" />
-                <p className="text-sm">Xodim yo'q</p>
+          <Card title="Xodimlar statistikasi">
+            {!data.employeesStats || data.employeesStats.length === 0 ? (
+              <div className="flex flex-col items-center py-8 text-gray-400">
+                <Users size={48} className="mb-3 opacity-30" />
+                <p className="text-sm font-medium">Xodim yo'q</p>
+                <p className="text-xs mt-1">Xodim qo'shing</p>
               </div>
             ) : (
-              <div className="space-y-3">
-                {data.recentNotifications.map((employee: any) => (
-                  <div key={employee.id} className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
+              <div className="space-y-3 max-h-96 overflow-y-auto">
+                {data.employeesStats.map((employee) => (
+                  <div key={employee.id} className="flex items-center gap-3 p-3 bg-gradient-to-r from-gray-50 to-white rounded-lg hover:shadow-md transition-all border border-gray-100">
                     {employee.avatar ? (
-                      <img src={employee.avatar} alt={employee.fullName} className="w-10 h-10 rounded-full object-cover" />
+                      <img src={employee.avatar} alt={employee.fullName} className="w-14 h-14 rounded-full object-cover flex-shrink-0 border-2 border-primary-200" />
                     ) : (
-                      <div className="w-10 h-10 rounded-full bg-primary-100 flex items-center justify-center text-primary-700 font-bold text-sm">
-                        {employee.fullName?.[0] || '?'}
+                      <div className="w-14 h-14 rounded-full bg-gradient-to-br from-primary-400 to-primary-600 flex items-center justify-center text-white font-bold text-lg flex-shrink-0 shadow-md">
+                        {employee.fullName?.[0]?.toUpperCase() || '?'}
                       </div>
                     )}
-                    <div className="flex-1">
-                      <p className="font-medium text-sm text-gray-900">{employee.fullName}</p>
-                      <p className="text-xs text-gray-500">{employee.role}</p>
+                    <div className="flex-1 min-w-0">
+                      <p className="font-bold text-base text-gray-900 truncate">{employee.fullName}</p>
+                      <p className="text-xs text-gray-500 font-medium mb-2">{employee.role}</p>
+                      <div className="flex items-center gap-4">
+                        <div className="flex items-center gap-1">
+                          <span className="text-green-600 font-bold text-lg">↑</span>
+                          <span className="text-xs text-green-700 font-semibold">{employee.kirim} kirim</span>
+                        </div>
+                        <div className="flex items-center gap-1">
+                          <span className="text-red-600 font-bold text-lg">↓</span>
+                          <span className="text-xs text-red-700 font-semibold">{employee.chiqim} chiqim</span>
+                        </div>
+                        <div className="flex items-center gap-1 ml-auto">
+                          <span className="text-blue-600 font-bold">Σ</span>
+                          <span className="text-sm text-blue-700 font-bold">{employee.jami} ta</span>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 ))}
-                <Link href={`/${locale}/admin/users`} className="block text-center text-sm text-primary-600 hover:underline pt-1">
-                  Barchasini ko'rish →
+                <Link href={`/${locale}/admin/users`} className="block text-center text-sm text-primary-600 hover:text-primary-700 hover:underline pt-2 font-medium">
+                  Barcha xodimlarni ko'rish →
                 </Link>
               </div>
             )}
@@ -130,11 +172,11 @@ export default function DashboardPage() {
         {/* Recent Transactions */}
         <div className="animate-fadeIn" style={{ animationDelay: '600ms' }}>
           <Card title={t('recentTransactions')}>
-            {data?.recentTransactions.length === 0 ? (
+            {data.recentTransactions.length === 0 ? (
               <p className="text-sm text-gray-400 text-center py-6">Tranzaksiya yo'q</p>
             ) : (
               <div className="space-y-3">
-                {data?.recentTransactions.map((tx) => (
+                {data.recentTransactions.map((tx) => (
                   <div key={tx.id} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
                     <div>
                       <p className="font-medium text-sm text-gray-900">{tx.product.name}</p>

@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
 import { useSession } from 'next-auth/react';
-import { Plus, Edit, Trash2 } from 'lucide-react';
+import { Plus, Edit, Trash2, Download, FileText } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -125,13 +125,117 @@ export default function AdminUsersPage() {
     return map[role] ?? 'info';
   };
 
+  const exportToCSV = () => {
+    const csvContent = [
+      ['Xodimlar ro\'yxati', new Date().toLocaleDateString('uz-UZ')],
+      [''],
+      ['#', 'To\'liq ism', 'Login', 'Rol', 'Telefon', 'Qo\'shilgan'],
+      ...users.map((u, i) => [
+        (i + 1).toString(),
+        u.fullName,
+        u.login,
+        getRoleName(u.role),
+        u.phone || '—',
+        formatDate(u.createdAt),
+      ]),
+    ]
+      .map((row) => row.join(','))
+      .join('\n');
+
+    const blob = new Blob(['\uFEFF' + csvContent], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = `xodimlar_${new Date().toISOString().split('T')[0]}.csv`;
+    link.click();
+  };
+
+  const exportToPDF = () => {
+    const printWindow = window.open('', '_blank');
+    if (!printWindow) return;
+
+    const html = `
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <meta charset="UTF-8">
+        <title>Xodimlar ro'yxati</title>
+        <style>
+          body { font-family: Arial, sans-serif; padding: 40px; }
+          h1 { color: #1f2937; margin-bottom: 10px; }
+          .date { color: #6b7280; margin-bottom: 30px; }
+          table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+          th, td { border: 1px solid #e5e7eb; padding: 12px; text-align: left; }
+          th { background-color: #f3f4f6; font-weight: 600; }
+          .badge { display: inline-block; padding: 4px 12px; border-radius: 12px; font-size: 12px; font-weight: 600; }
+          .badge-danger { background-color: #fee2e2; color: #991b1b; }
+          .badge-warning { background-color: #fef3c7; color: #92400e; }
+          .badge-success { background-color: #d1fae5; color: #065f46; }
+          .badge-info { background-color: #dbeafe; color: #1e40af; }
+          @media print {
+            body { padding: 20px; }
+          }
+        </style>
+      </head>
+      <body>
+        <h1>Xodimlar ro'yxati</h1>
+        <div class="date">${new Date().toLocaleDateString('uz-UZ')}</div>
+        
+        <table>
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>To'liq ism</th>
+              <th>Login</th>
+              <th>Rol</th>
+              <th>Telefon</th>
+              <th>Qo'shilgan</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${users.map((u, i) => `
+              <tr>
+                <td>${i + 1}</td>
+                <td>${u.fullName}</td>
+                <td>${u.login}</td>
+                <td><span class="badge badge-${roleVariant(u.role)}">${getRoleName(u.role)}</span></td>
+                <td>${u.phone || '—'}</td>
+                <td>${formatDate(u.createdAt)}</td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+
+        <script>
+          window.onload = () => {
+            window.print();
+            setTimeout(() => window.close(), 100);
+          };
+        </script>
+      </body>
+      </html>
+    `;
+
+    printWindow.document.write(html);
+    printWindow.document.close();
+  };
+
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <h1 className="text-3xl font-bold text-gray-900">Xodimlar boshqaruvi</h1>
-        <Button className="flex items-center gap-2" onClick={() => setShowAddModal(true)}>
-          <Plus size={18} /> Yangi xodim
-        </Button>
+        <div className="flex items-center gap-3">
+          <Button variant="outline" size="sm" onClick={exportToCSV} className="flex items-center gap-2">
+            <Download size={16} />
+            Excel
+          </Button>
+          <Button variant="outline" size="sm" onClick={exportToPDF} className="flex items-center gap-2">
+            <FileText size={16} />
+            PDF
+          </Button>
+          <Button className="flex items-center gap-2" onClick={() => setShowAddModal(true)}>
+            <Plus size={18} /> Yangi xodim
+          </Button>
+        </div>
       </div>
 
       {loading ? (
