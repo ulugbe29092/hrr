@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useTranslations } from '@/hooks/useTranslations';
 import { useSearchParams, useRouter, usePathname } from 'next/navigation';
-import { FileText, FileSpreadsheet, TrendingUp, TrendingDown, DollarSign } from 'lucide-react';
+import { TrendingUp, TrendingDown, DollarSign } from 'lucide-react';
 import Button from '@/components/ui/Button';
 import Card from '@/components/ui/Card';
 import Badge from '@/components/ui/Badge';
@@ -42,7 +42,6 @@ export default function ReportsPage() {
   const pathname = usePathname();
   const [data, setData] = useState<ReportData | null>(null);
   const [loading, setLoading] = useState(true);
-  const [exporting, setExporting] = useState<'pdf' | 'excel' | null>(null);
 
   const period = (searchParams.get('period') as Period) || 'daily';
 
@@ -64,48 +63,6 @@ export default function ReportsPage() {
     router.push(`${pathname}?period=${p}`);
   };
 
-  const handleExportPDF = async () => {
-    if (!data) return;
-    setExporting('pdf');
-    try {
-      const { generatePDFReport } = await import('@/lib/pdf');
-      const doc = generatePDFReport({
-        period: data.period,
-        products: data.products,
-        totalProfit: data.totalProfit,
-        employees: data.employees,
-      });
-      doc.save(`hisobot-${period}-${new Date().toISOString().split('T')[0]}.pdf`);
-    } finally {
-      setExporting(null);
-    }
-  };
-
-  const handleExportExcel = async () => {
-    if (!data) return;
-    setExporting('excel');
-    try {
-      const { generateExcelReport } = await import('@/lib/excel');
-      const buffer = generateExcelReport({
-        period: data.period,
-        products: data.products,
-        totalProfit: data.totalProfit,
-        employees: data.employees,
-      });
-      const blob = new Blob([buffer], {
-        type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-      });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = `hisobot-${period}-${new Date().toISOString().split('T')[0]}.xlsx`;
-      a.click();
-      URL.revokeObjectURL(url);
-    } finally {
-      setExporting(null);
-    }
-  };
-
   const periods: { key: Period; label: string }[] = [
     { key: 'daily', label: t('daily') },
     { key: 'weekly', label: t('weekly') },
@@ -116,25 +73,6 @@ export default function ReportsPage() {
     <div className="space-y-6">
       <div className="flex items-center justify-between flex-wrap gap-4">
         <h1 className="text-3xl font-bold text-gray-900">{t('title')}</h1>
-        <div className="flex gap-3">
-          <Button
-            variant="secondary"
-            className="flex items-center gap-2"
-            onClick={handleExportPDF}
-            isLoading={exporting === 'pdf'}
-            disabled={!data}
-          >
-            <FileText size={18} /> {t('downloadPDF')}
-          </Button>
-          <Button
-            className="flex items-center gap-2"
-            onClick={handleExportExcel}
-            isLoading={exporting === 'excel'}
-            disabled={!data}
-          >
-            <FileSpreadsheet size={18} /> {t('downloadExcel')}
-          </Button>
-        </div>
       </div>
 
       {/* Period Tabs */}
