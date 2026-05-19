@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useTranslations } from '@/hooks/useTranslations';
 import { useParams } from 'next/navigation';
-import { Plus } from 'lucide-react';
+import { Plus, Download, FileText } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -155,16 +155,119 @@ export default function TransactionsPage() {
     ? transactions
     : transactions.filter((t) => t.type === filter);
 
+  const exportToCSV = () => {
+    const csvContent = [
+      ['Kirim/Chiqim Hisoboti', new Date().toLocaleDateString('uz-UZ')],
+      [''],
+      ['#', 'Mahsulot', 'Turi', 'Miqdor', 'Izoh', 'Yaratuvchi', 'Sana'],
+      ...filtered.map((tx, i) => [
+        (i + 1).toString(),
+        tx.product.name,
+        tx.type,
+        tx.quantity + ' ta',
+        tx.note || '—',
+        tx.creator.fullName,
+        formatDateTime(tx.createdAt),
+      ]),
+    ]
+      .map((row) => row.join(','))
+      .join('\n');
+
+    const blob = new Blob(['\uFEFF' + csvContent], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = `kirim_chiqim_${new Date().toISOString().split('T')[0]}.csv`;
+    link.click();
+  };
+
+  const exportToPDF = () => {
+    const printWindow = window.open('', '_blank');
+    if (!printWindow) return;
+
+    const html = `
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <meta charset="UTF-8">
+        <title>Kirim/Chiqim Hisoboti</title>
+        <style>
+          body { font-family: Arial, sans-serif; padding: 40px; }
+          h1 { color: #1f2937; margin-bottom: 10px; }
+          .date { color: #6b7280; margin-bottom: 30px; }
+          table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+          th, td { border: 1px solid #e5e7eb; padding: 12px; text-align: left; }
+          th { background-color: #f3f4f6; font-weight: 600; }
+          .badge { display: inline-block; padding: 4px 12px; border-radius: 12px; font-size: 12px; font-weight: 600; }
+          .badge-success { background-color: #d1fae5; color: #065f46; }
+          .badge-warning { background-color: #fef3c7; color: #92400e; }
+          @media print {
+            body { padding: 20px; }
+          }
+        </style>
+      </head>
+      <body>
+        <h1>Kirim/Chiqim Hisoboti</h1>
+        <div class="date">${new Date().toLocaleDateString('uz-UZ')}</div>
+        
+        <table>
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Mahsulot</th>
+              <th>Turi</th>
+              <th>Miqdor</th>
+              <th>Izoh</th>
+              <th>Yaratuvchi</th>
+              <th>Sana</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${filtered.map((tx, i) => `
+              <tr>
+                <td>${i + 1}</td>
+                <td>${tx.product.name}</td>
+                <td><span class="badge badge-${tx.type === 'KIRIM' ? 'success' : 'warning'}">${tx.type}</span></td>
+                <td>${tx.quantity} ta</td>
+                <td>${tx.note || '—'}</td>
+                <td>${tx.creator.fullName}</td>
+                <td>${formatDateTime(tx.createdAt)}</td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+
+        <script>
+          window.onload = () => {
+            window.print();
+            setTimeout(() => window.close(), 100);
+          };
+        </script>
+      </body>
+      </html>
+    `;
+
+    printWindow.document.write(html);
+    printWindow.document.close();
+  };
+
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <h1 className="text-3xl font-bold text-gray-900">{t('title')}</h1>
         <div className="flex gap-3">
+          <Button variant="outline" size="sm" onClick={exportToCSV} className="flex items-center gap-2">
+            <Download size={16} />
+            Excel
+          </Button>
+          <Button variant="outline" size="sm" onClick={exportToPDF} className="flex items-center gap-2">
+            <FileText size={16} />
+            PDF
+          </Button>
           <Button variant="secondary" className="flex items-center gap-2" onClick={() => openModal('KIRIM')}>
-            <Plus size={18} /> Kirim qo'shish
+            <Plus size={18} /> Kirim
           </Button>
           <Button className="flex items-center gap-2" onClick={() => openModal('CHIQIM')}>
-            <Plus size={18} /> Chiqim qo'shish
+            <Plus size={18} /> Chiqim
           </Button>
         </div>
       </div>

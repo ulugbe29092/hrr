@@ -59,6 +59,8 @@ export default function DashboardPage() {
       
       if (dashboardRes.ok) {
         const dashboardData = await dashboardRes.json();
+        console.log('Dashboard Data:', dashboardData);
+        console.log('Employees Stats:', dashboardData.employeesStats);
         setData(dashboardData);
       }
     } catch (error) {
@@ -98,9 +100,9 @@ export default function DashboardPage() {
     <div className="space-y-6">
       <h1 className="text-3xl font-bold text-gray-900">{t('title')}</h1>
 
-      {/* Stat Cards */}
+      {/* Stat Cards - Responsive Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-        {statCards.map((stat, i) => (
+        {statCards.slice(0, 6).map((stat, i) => (
           <div
             key={stat.title}
             className="animate-fadeIn"
@@ -117,6 +119,24 @@ export default function DashboardPage() {
             </Card>
           </div>
         ))}
+        
+        {/* Bugungi foyda - 2 ustun */}
+        <div
+          className="sm:col-span-2 animate-fadeIn"
+          style={{ animationDelay: '420ms' }}
+        >
+          <Card className="hover:shadow-lg transition-shadow cursor-default">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm text-gray-500 mb-1">{statCards[6].title}</p>
+                <p className="text-2xl font-bold text-green-700">{statCards[6].value}</p>
+              </div>
+              <div className={`p-3 rounded-xl ${statCards[6].bg}`}>
+                {statCards[6].icon}
+              </div>
+            </div>
+          </Card>
+        </div>
       </div>
 
       {/* Bottom Row */}
@@ -128,7 +148,15 @@ export default function DashboardPage() {
               <div className="flex flex-col items-center py-8 text-gray-400">
                 <Users size={48} className="mb-3 opacity-30" />
                 <p className="text-sm font-medium">Xodim yo'q</p>
-                <p className="text-xs mt-1">Xodim qo'shing</p>
+                <p className="text-xs mt-1 text-center">
+                  Xodim qo'shing
+                </p>
+                <Link 
+                  href={`/${locale}/admin/users`}
+                  className="mt-4 px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors text-sm font-medium"
+                >
+                  Xodim qo'shish
+                </Link>
               </div>
             ) : (
               <div className="space-y-3 max-h-96 overflow-y-auto">
@@ -147,15 +175,15 @@ export default function DashboardPage() {
                       <div className="flex items-center gap-4">
                         <div className="flex items-center gap-1">
                           <span className="text-green-600 font-bold text-lg">↑</span>
-                          <span className="text-xs text-green-700 font-semibold">{employee.kirim} kirim</span>
+                          <span className="text-xs text-green-700 font-semibold">{employee.kirim || 0} kirim</span>
                         </div>
                         <div className="flex items-center gap-1">
                           <span className="text-red-600 font-bold text-lg">↓</span>
-                          <span className="text-xs text-red-700 font-semibold">{employee.chiqim} chiqim</span>
+                          <span className="text-xs text-red-700 font-semibold">{employee.chiqim || 0} chiqim</span>
                         </div>
                         <div className="flex items-center gap-1 ml-auto">
                           <span className="text-blue-600 font-bold">Σ</span>
-                          <span className="text-sm text-blue-700 font-bold">{employee.jami} ta</span>
+                          <span className="text-sm text-blue-700 font-bold">{employee.jami || 0} ta</span>
                         </div>
                       </div>
                     </div>
