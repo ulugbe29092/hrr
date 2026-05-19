@@ -221,19 +221,34 @@ export default function AdminUsersPage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <h1 className="text-3xl font-bold text-gray-900">Xodimlar boshqaruvi</h1>
-        <div className="flex items-center gap-3">
-          <Button variant="outline" size="sm" onClick={exportToCSV} className="flex items-center gap-2">
+        <div className="flex flex-wrap gap-2 sm:gap-3">
+          <Button 
+            variant="outline" 
+            size="sm" 
+            onClick={exportToCSV} 
+            className="flex items-center gap-2 flex-1 sm:flex-initial justify-center"
+          >
             <Download size={16} />
-            Excel
+            <span>Excel</span>
           </Button>
-          <Button variant="outline" size="sm" onClick={exportToPDF} className="flex items-center gap-2">
+          <Button 
+            variant="outline" 
+            size="sm" 
+            onClick={exportToPDF} 
+            className="flex items-center gap-2 flex-1 sm:flex-initial justify-center"
+          >
             <FileText size={16} />
-            PDF
+            <span>PDF</span>
           </Button>
-          <Button className="flex items-center gap-2" onClick={() => setShowAddModal(true)}>
-            <Plus size={18} /> Yangi xodim
+          <Button 
+            className="flex items-center gap-2 flex-1 sm:flex-initial justify-center" 
+            onClick={() => setShowAddModal(true)}
+          >
+            <Plus size={18} />
+            <span className="hidden sm:inline">Yangi xodim</span>
+            <span className="sm:hidden">Xodim</span>
           </Button>
         </div>
       </div>

@@ -252,22 +252,45 @@ export default function TransactionsPage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <h1 className="text-3xl font-bold text-gray-900">{t('title')}</h1>
-        <div className="flex gap-3">
-          <Button variant="outline" size="sm" onClick={exportToCSV} className="flex items-center gap-2">
+        <div className="flex flex-wrap gap-2 sm:gap-3">
+          <Button 
+            variant="outline" 
+            size="sm" 
+            onClick={exportToCSV} 
+            className="flex items-center gap-2 flex-1 sm:flex-initial justify-center"
+          >
             <Download size={16} />
-            Excel
+            <span className="hidden sm:inline">Excel</span>
+            <span className="sm:hidden">Excel</span>
           </Button>
-          <Button variant="outline" size="sm" onClick={exportToPDF} className="flex items-center gap-2">
+          <Button 
+            variant="outline" 
+            size="sm" 
+            onClick={exportToPDF} 
+            className="flex items-center gap-2 flex-1 sm:flex-initial justify-center"
+          >
             <FileText size={16} />
-            PDF
+            <span className="hidden sm:inline">PDF</span>
+            <span className="sm:hidden">PDF</span>
           </Button>
-          <Button variant="secondary" className="flex items-center gap-2" onClick={() => openModal('KIRIM')}>
-            <Plus size={18} /> Kirim
+          <Button 
+            variant="secondary" 
+            className="flex items-center gap-2 flex-1 sm:flex-initial justify-center" 
+            onClick={() => openModal('KIRIM')}
+          >
+            <Plus size={18} />
+            <span className="hidden sm:inline">Kirim</span>
+            <span className="sm:hidden">Kirim</span>
           </Button>
-          <Button className="flex items-center gap-2" onClick={() => openModal('CHIQIM')}>
-            <Plus size={18} /> Chiqim
+          <Button 
+            className="flex items-center gap-2 flex-1 sm:flex-initial justify-center" 
+            onClick={() => openModal('CHIQIM')}
+          >
+            <Plus size={18} />
+            <span className="hidden sm:inline">Chiqim</span>
+            <span className="sm:hidden">Chiqim</span>
           </Button>
         </div>
       </div>
