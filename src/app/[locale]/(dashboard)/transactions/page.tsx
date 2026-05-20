@@ -180,74 +180,40 @@ export default function TransactionsPage() {
     link.click();
   };
 
-  const exportToPDF = () => {
-    const printWindow = window.open('', '_blank');
-    if (!printWindow) return;
-
-    const html = `
-      <!DOCTYPE html>
-      <html>
-      <head>
-        <meta charset="UTF-8">
-        <title>Kirim/Chiqim Hisoboti</title>
-        <style>
-          body { font-family: Arial, sans-serif; padding: 40px; }
-          h1 { color: #1f2937; margin-bottom: 10px; }
-          .date { color: #6b7280; margin-bottom: 30px; }
-          table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-          th, td { border: 1px solid #e5e7eb; padding: 12px; text-align: left; }
-          th { background-color: #f3f4f6; font-weight: 600; }
-          .badge { display: inline-block; padding: 4px 12px; border-radius: 12px; font-size: 12px; font-weight: 600; }
-          .badge-success { background-color: #d1fae5; color: #065f46; }
-          .badge-warning { background-color: #fef3c7; color: #92400e; }
-          @media print {
-            body { padding: 20px; }
-          }
-        </style>
-      </head>
-      <body>
-        <h1>Kirim/Chiqim Hisoboti</h1>
-        <div class="date">${new Date().toLocaleDateString('uz-UZ')}</div>
-        
-        <table>
-          <thead>
-            <tr>
-              <th>#</th>
-              <th>Mahsulot</th>
-              <th>Turi</th>
-              <th>Miqdor</th>
-              <th>Izoh</th>
-              <th>Yaratuvchi</th>
-              <th>Sana</th>
-            </tr>
-          </thead>
-          <tbody>
-            ${filtered.map((tx, i) => `
-              <tr>
-                <td>${i + 1}</td>
-                <td>${tx.product.name}</td>
-                <td><span class="badge badge-${tx.type === 'KIRIM' ? 'success' : 'warning'}">${tx.type}</span></td>
-                <td>${tx.quantity} ta</td>
-                <td>${tx.note || '—'}</td>
-                <td>${tx.creator.fullName}</td>
-                <td>${formatDateTime(tx.createdAt)}</td>
-              </tr>
-            `).join('')}
-          </tbody>
-        </table>
-
-        <script>
-          window.onload = () => {
-            window.print();
-            setTimeout(() => window.close(), 100);
-          };
-        </script>
-      </body>
-      </html>
-    `;
-
-    printWindow.document.write(html);
-    printWindow.document.close();
+  const exportToPDF = async () => {
+    const { jsPDF } = await import('jspdf');
+    await import('jspdf-autotable');
+    
+    const doc = new jsPDF() as any;
+    
+    doc.setFontSize(18);
+    doc.text('Kirim/Chiqim Hisoboti', 14, 20);
+    
+    doc.setFontSize(11);
+    doc.setTextColor(100);
+    doc.text(new Date().toLocaleDateString('uz-UZ'), 14, 28);
+    
+    const tableData = filtered.map((tx, i) => [
+      (i + 1).toString(),
+      tx.product.name,
+      tx.type,
+      tx.quantity + ' ta',
+      tx.note || '—',
+      tx.creator.fullName,
+      formatDateTime(tx.createdAt),
+    ]);
+    
+    doc.autoTable({
+      startY: 35,
+      head: [['#', 'Mahsulot', 'Turi', 'Miqdor', 'Izoh', 'Yaratuvchi', 'Sana']],
+      body: tableData,
+      styles: { font: 'helvetica', fontSize: 8 },
+      headStyles: { fillColor: [59, 130, 246], textColor: 255 },
+      alternateRowStyles: { fillColor: [245, 247, 250] },
+    });
+    
+    doc.save(`kirim_chiqim_${new Date().toISOString().split('T')[0]}.pdf`);
+  };
   };
 
   return (
@@ -256,7 +222,7 @@ export default function TransactionsPage() {
         <h1 className="text-3xl font-bold text-gray-900">{t('title')}</h1>
         <div className="flex flex-wrap gap-2 sm:gap-3">
           <Button 
-            variant="outline" 
+            variant="secondary" 
             size="sm" 
             onClick={exportToCSV} 
             className="flex items-center gap-2 flex-1 sm:flex-initial justify-center"
@@ -266,7 +232,7 @@ export default function TransactionsPage() {
             <span className="sm:hidden">Excel</span>
           </Button>
           <Button 
-            variant="outline" 
+            variant="secondary" 
             size="sm" 
             onClick={exportToPDF} 
             className="flex items-center gap-2 flex-1 sm:flex-initial justify-center"

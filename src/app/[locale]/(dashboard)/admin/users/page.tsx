@@ -149,74 +149,41 @@ export default function AdminUsersPage() {
     link.click();
   };
 
-  const exportToPDF = () => {
-    const printWindow = window.open('', '_blank');
-    if (!printWindow) return;
-
-    const html = `
-      <!DOCTYPE html>
-      <html>
-      <head>
-        <meta charset="UTF-8">
-        <title>Xodimlar ro'yxati</title>
-        <style>
-          body { font-family: Arial, sans-serif; padding: 40px; }
-          h1 { color: #1f2937; margin-bottom: 10px; }
-          .date { color: #6b7280; margin-bottom: 30px; }
-          table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-          th, td { border: 1px solid #e5e7eb; padding: 12px; text-align: left; }
-          th { background-color: #f3f4f6; font-weight: 600; }
-          .badge { display: inline-block; padding: 4px 12px; border-radius: 12px; font-size: 12px; font-weight: 600; }
-          .badge-danger { background-color: #fee2e2; color: #991b1b; }
-          .badge-warning { background-color: #fef3c7; color: #92400e; }
-          .badge-success { background-color: #d1fae5; color: #065f46; }
-          .badge-info { background-color: #dbeafe; color: #1e40af; }
-          @media print {
-            body { padding: 20px; }
-          }
-        </style>
-      </head>
-      <body>
-        <h1>Xodimlar ro'yxati</h1>
-        <div class="date">${new Date().toLocaleDateString('uz-UZ')}</div>
-        
-        <table>
-          <thead>
-            <tr>
-              <th>#</th>
-              <th>To'liq ism</th>
-              <th>Login</th>
-              <th>Rol</th>
-              <th>Telefon</th>
-              <th>Qo'shilgan</th>
-            </tr>
-          </thead>
-          <tbody>
-            ${users.map((u, i) => `
-              <tr>
-                <td>${i + 1}</td>
-                <td>${u.fullName}</td>
-                <td>${u.login}</td>
-                <td><span class="badge badge-${roleVariant(u.role)}">${getRoleName(u.role)}</span></td>
-                <td>${u.phone || '—'}</td>
-                <td>${formatDate(u.createdAt)}</td>
-              </tr>
-            `).join('')}
-          </tbody>
-        </table>
-
-        <script>
-          window.onload = () => {
-            window.print();
-            setTimeout(() => window.close(), 100);
-          };
-        </script>
-      </body>
-      </html>
-    `;
-
-    printWindow.document.write(html);
-    printWindow.document.close();
+  const exportToPDF = async () => {
+    const { jsPDF } = await import('jspdf');
+    await import('jspdf-autotable');
+    
+    const doc = new jsPDF() as any;
+    
+    // Title
+    doc.setFontSize(18);
+    doc.text('Xodimlar ro\'yxati', 14, 20);
+    
+    // Date
+    doc.setFontSize(11);
+    doc.setTextColor(100);
+    doc.text(new Date().toLocaleDateString('uz-UZ'), 14, 28);
+    
+    // Table
+    const tableData = users.map((u, i) => [
+      (i + 1).toString(),
+      u.fullName,
+      u.login,
+      getRoleName(u.role),
+      u.phone || '—',
+      formatDate(u.createdAt),
+    ]);
+    
+    doc.autoTable({
+      startY: 35,
+      head: [['#', 'To\'liq ism', 'Login', 'Rol', 'Telefon', 'Qo\'shilgan']],
+      body: tableData,
+      styles: { font: 'helvetica', fontSize: 10 },
+      headStyles: { fillColor: [59, 130, 246], textColor: 255 },
+      alternateRowStyles: { fillColor: [245, 247, 250] },
+    });
+    
+    doc.save(`xodimlar_${new Date().toISOString().split('T')[0]}.pdf`);
   };
 
   return (
@@ -225,7 +192,7 @@ export default function AdminUsersPage() {
         <h1 className="text-3xl font-bold text-gray-900">Xodimlar boshqaruvi</h1>
         <div className="flex flex-wrap gap-2 sm:gap-3">
           <Button 
-            variant="outline" 
+            variant="secondary" 
             size="sm" 
             onClick={exportToCSV} 
             className="flex items-center gap-2 flex-1 sm:flex-initial justify-center"
@@ -234,7 +201,7 @@ export default function AdminUsersPage() {
             <span>Excel</span>
           </Button>
           <Button 
-            variant="outline" 
+            variant="secondary" 
             size="sm" 
             onClick={exportToPDF} 
             className="flex items-center gap-2 flex-1 sm:flex-initial justify-center"

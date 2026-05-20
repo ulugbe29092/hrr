@@ -79,93 +79,47 @@ export default function StatisticsPage() {
     link.click();
   };
 
-  const exportToPDF = () => {
+  const exportToPDF = async () => {
     if (!data) return;
     
-    // Simple HTML to PDF approach
-    const printWindow = window.open('', '_blank');
-    if (!printWindow) return;
-
-    const html = `
-      <!DOCTYPE html>
-      <html>
-      <head>
-        <meta charset="UTF-8">
-        <title>Statistika Hisoboti</title>
-        <style>
-          body { font-family: Arial, sans-serif; padding: 40px; }
-          h1 { color: #1f2937; margin-bottom: 10px; }
-          .period { color: #6b7280; margin-bottom: 30px; }
-          .stats { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; margin-bottom: 30px; }
-          .stat-card { border: 1px solid #e5e7eb; padding: 20px; border-radius: 8px; }
-          .stat-label { color: #6b7280; font-size: 14px; margin-bottom: 5px; }
-          .stat-value { font-size: 24px; font-weight: bold; color: #1f2937; }
-          table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-          th, td { border: 1px solid #e5e7eb; padding: 12px; text-align: left; }
-          th { background-color: #f3f4f6; font-weight: 600; }
-          .profit { color: #059669; font-weight: 600; }
-          @media print {
-            body { padding: 20px; }
-          }
-        </style>
-      </head>
-      <body>
-        <h1>Statistika Hisoboti</h1>
-        <div class="period">${periodLabels[period]} - ${new Date().toLocaleDateString('uz-UZ')}</div>
-        
-        <div class="stats">
-          <div class="stat-card">
-            <div class="stat-label">Jami sotuvlar</div>
-            <div class="stat-value">${data.totalSales} ta</div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-label">Jami kirim</div>
-            <div class="stat-value">${data.totalIncome} ta</div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-label">Jami chiqim</div>
-            <div class="stat-value">${data.totalExpense} ta</div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-label">Jami foyda</div>
-            <div class="stat-value profit">${formatCurrency(data.totalProfit)}</div>
-          </div>
-        </div>
-
-        <h2>Eng ko'p sotilgan mahsulotlar</h2>
-        <table>
-          <thead>
-            <tr>
-              <th>#</th>
-              <th>Mahsulot</th>
-              <th>Sotildi</th>
-              <th>Foyda</th>
-            </tr>
-          </thead>
-          <tbody>
-            ${data.topProducts.map((p, i) => `
-              <tr>
-                <td>${i + 1}</td>
-                <td>${p.name}</td>
-                <td>${p.quantity} ta</td>
-                <td class="profit">${formatCurrency(p.profit)}</td>
-              </tr>
-            `).join('')}
-          </tbody>
-        </table>
-
-        <script>
-          window.onload = () => {
-            window.print();
-            setTimeout(() => window.close(), 100);
-          };
-        </script>
-      </body>
-      </html>
-    `;
-
-    printWindow.document.write(html);
-    printWindow.document.close();
+    const { jsPDF } = await import('jspdf');
+    await import('jspdf-autotable');
+    
+    const doc = new jsPDF() as any;
+    
+    doc.setFontSize(18);
+    doc.text('Statistika Hisoboti', 14, 20);
+    
+    doc.setFontSize(11);
+    doc.setTextColor(100);
+    doc.text(`${periodLabels[period]} - ${new Date().toLocaleDateString('uz-UZ')}`, 14, 28);
+    
+    // Stats summary
+    doc.setFontSize(12);
+    doc.setTextColor(0);
+    doc.text(`Jami sotuvlar: ${data.totalSales} ta`, 14, 40);
+    doc.text(`Jami kirim: ${data.totalIncome} ta`, 14, 48);
+    doc.text(`Jami chiqim: ${data.totalExpense} ta`, 14, 56);
+    doc.text(`Jami foyda: ${formatCurrency(data.totalProfit)}`, 14, 64);
+    
+    // Top products table
+    const tableData = data.topProducts.map((p, i) => [
+      (i + 1).toString(),
+      p.name,
+      p.quantity + ' ta',
+      formatCurrency(p.profit),
+    ]);
+    
+    doc.autoTable({
+      startY: 75,
+      head: [['#', 'Mahsulot', 'Sotildi', 'Foyda']],
+      body: tableData,
+      styles: { font: 'helvetica', fontSize: 10 },
+      headStyles: { fillColor: [59, 130, 246], textColor: 255 },
+      alternateRowStyles: { fillColor: [245, 247, 250] },
+    });
+    
+    doc.save(`statistika_${period}_${new Date().toISOString().split('T')[0]}.pdf`);
   };
 
   const periodLabels = {
@@ -192,7 +146,7 @@ export default function StatisticsPage() {
           {/* Export Buttons */}
           <div className="flex gap-2">
             <Button
-              variant="outline"
+              variant="secondary"
               size="sm"
               onClick={exportToCSV}
               disabled={!data}
@@ -203,7 +157,7 @@ export default function StatisticsPage() {
             </Button>
             
             <Button
-              variant="outline"
+              variant="secondary"
               size="sm"
               onClick={exportToPDF}
               disabled={!data}

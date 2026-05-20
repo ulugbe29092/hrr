@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useTranslations } from '@/hooks/useTranslations';
-import { Plus, Search, Edit, Eye, Upload, Trash2 } from 'lucide-react';
+import { Plus, Edit, Eye, Upload, Trash2, Download, FileText } from 'lucide-react';
 import { useParams } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -137,7 +137,7 @@ export default function ProductsPage() {
         
         // Redirect to transactions after 5 seconds
         setTimeout(() => {
-          addToast('Kirim/Chiqimga o\'tilmoqda...', 'info');
+          addToast('Kirim/Chiqimga o\'tilmoqda...', 'success');
         }, 1500);
         setTimeout(() => {
           window.location.href = `/${locale}/transactions/income`;
@@ -157,14 +157,100 @@ export default function ProductsPage() {
     p.name.toLowerCase().includes(search.toLowerCase())
   );
 
+  const exportToCSV = () => {
+    const csvContent = [
+      ['Mahsulotlar Hisoboti', new Date().toLocaleDateString('uz-UZ')],
+      [''],
+      ['#', 'Mahsulot', 'Kelish narxi', 'Sotish narxi', 'Kirim', 'Chiqim', 'Qoldiq', 'Foyda'],
+      ...filtered.map((p, i) => [
+        (i + 1).toString(),
+        p.name,
+        formatCurrency(p.buyPrice),
+        formatCurrency(p.sellPrice),
+        p.income + ' ta',
+        p.expense + ' ta',
+        p.balance + ' ta',
+        formatCurrency(p.profit),
+      ]),
+    ]
+      .map((row) => row.join(','))
+      .join('\n');
+
+    const blob = new Blob(['\uFEFF' + csvContent], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = `mahsulotlar_${new Date().toISOString().split('T')[0]}.csv`;
+    link.click();
+  };
+
+  const exportToPDF = async () => {
+    const { jsPDF } = await import('jspdf');
+    await import('jspdf-autotable');
+    
+    const doc = new jsPDF() as any;
+    
+    doc.setFontSize(18);
+    doc.text('Mahsulotlar Hisoboti', 14, 20);
+    
+    doc.setFontSize(11);
+    doc.setTextColor(100);
+    doc.text(new Date().toLocaleDateString('uz-UZ'), 14, 28);
+    
+    const tableData = filtered.map((p, i) => [
+      (i + 1).toString(),
+      p.name,
+      formatCurrency(p.buyPrice),
+      formatCurrency(p.sellPrice),
+      p.income + ' ta',
+      p.expense + ' ta',
+      p.balance + ' ta',
+      formatCurrency(p.profit),
+    ]);
+    
+    doc.autoTable({
+      startY: 35,
+      head: [['#', 'Mahsulot', 'Kelish', 'Sotish', 'Kirim', 'Chiqim', 'Qoldiq', 'Foyda']],
+      body: tableData,
+      styles: { font: 'helvetica', fontSize: 9 },
+      headStyles: { fillColor: [59, 130, 246], textColor: 255 },
+      alternateRowStyles: { fillColor: [245, 247, 250] },
+    });
+    
+    doc.save(`mahsulotlar_${new Date().toISOString().split('T')[0]}.pdf`);
+  };
+
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <h1 className="text-3xl font-bold text-gray-900">{t('title')}</h1>
-        <Button className="flex items-center gap-2" onClick={() => setShowAddModal(true)}>
-          <Plus size={20} />
-          {t('addProduct')}
-        </Button>
+        <div className="flex flex-wrap gap-2 sm:gap-3">
+          <Button 
+            variant="secondary" 
+            size="sm" 
+            onClick={exportToCSV} 
+            className="flex items-center gap-2 flex-1 sm:flex-initial justify-center"
+          >
+            <Download size={16} />
+            <span>Excel</span>
+          </Button>
+          <Button 
+            variant="secondary" 
+            size="sm" 
+            onClick={exportToPDF} 
+            className="flex items-center gap-2 flex-1 sm:flex-initial justify-center"
+          >
+            <FileText size={16} />
+            <span>PDF</span>
+          </Button>
+          <Button 
+            className="flex items-center gap-2 flex-1 sm:flex-initial justify-center" 
+            onClick={() => setShowAddModal(true)}
+          >
+            <Plus size={18} />
+            <span className="hidden sm:inline">{t('addProduct')}</span>
+            <span className="sm:hidden">Qo'shish</span>
+          </Button>
+        </div>
       </div>
 
       {/* Search */}

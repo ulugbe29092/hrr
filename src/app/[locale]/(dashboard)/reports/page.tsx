@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useTranslations } from '@/hooks/useTranslations';
 import { useSearchParams, useRouter, usePathname } from 'next/navigation';
-import { TrendingUp, TrendingDown, DollarSign } from 'lucide-react';
+import { TrendingUp, TrendingDown, DollarSign, Download, FileText } from 'lucide-react';
 import Button from '@/components/ui/Button';
 import Card from '@/components/ui/Card';
 import Badge from '@/components/ui/Badge';
@@ -69,10 +69,141 @@ export default function ReportsPage() {
     { key: 'monthly', label: t('monthly') },
   ];
 
+  const exportToCSV = () => {
+    if (!data) return;
+
+    const csvContent = [
+      ['Hisobotlar', period === 'daily' ? 'Kunlik' : period === 'weekly' ? 'Haftalik' : 'Oylik'],
+      [''],
+      ['Jami kirim', data.totalIncome + ' ta'],
+      ['Jami chiqim', data.totalExpense + ' ta'],
+      ['Jami foyda', formatCurrency(data.totalProfit)],
+      [''],
+      ['Mahsulotlar bo\'yicha hisobot'],
+      ['#', 'Mahsulot', 'Kirim', 'Chiqim', 'Qoldiq', 'Foyda'],
+      ...data.products.map((p, i) => [
+        (i + 1).toString(),
+        p.name,
+        p.income + ' ta',
+        p.expense + ' ta',
+        p.balance + ' ta',
+        formatCurrency(p.profit),
+      ]),
+      [''],
+      ['Xodimlar bo\'yicha hisobot'],
+      ['#', 'Xodim', 'Ish soatlari', 'Tranzaksiyalar'],
+      ...data.employees.map((e, i) => [
+        (i + 1).toString(),
+        e.fullName,
+        e.workHours.toFixed(1) + ' soat',
+        e.transactions + ' ta',
+      ]),
+    ]
+      .map((row) => row.join(','))
+      .join('\n');
+
+    const blob = new Blob(['\uFEFF' + csvContent], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = `hisobotlar_${period}_${new Date().toISOString().split('T')[0]}.csv`;
+    link.click();
+  };
+
+  const exportToPDF = async () => {
+    if (!data) return;
+
+    const { jsPDF } = await import('jspdf');
+    await import('jspdf-autotable');
+    
+    const doc = new jsPDF() as any;
+    
+    doc.setFontSize(18);
+    doc.text('Hisobotlar', 14, 20);
+    
+    doc.setFontSize(11);
+    doc.setTextColor(100);
+    const periodLabel = period === 'daily' ? 'Kunlik' : period === 'weekly' ? 'Haftalik' : 'Oylik';
+    doc.text(`${periodLabel} - ${new Date().toLocaleDateString('uz-UZ')}`, 14, 28);
+    
+    // Summary
+    doc.setFontSize(12);
+    doc.setTextColor(0);
+    doc.text(`Jami kirim: ${data.totalIncome} ta`, 14, 40);
+    doc.text(`Jami chiqim: ${data.totalExpense} ta`, 14, 48);
+    doc.text(`Jami foyda: ${formatCurrency(data.totalProfit)}`, 14, 56);
+    
+    // Products table
+    doc.setFontSize(14);
+    doc.text('Mahsulotlar bo\'yicha hisobot', 14, 68);
+    
+    const productsData = data.products.map((p, i) => [
+      (i + 1).toString(),
+      p.name,
+      p.income + ' ta',
+      p.expense + ' ta',
+      p.balance + ' ta',
+      formatCurrency(p.profit),
+    ]);
+    
+    doc.autoTable({
+      startY: 73,
+      head: [['#', 'Mahsulot', 'Kirim', 'Chiqim', 'Qoldiq', 'Foyda']],
+      body: productsData,
+      styles: { font: 'helvetica', fontSize: 9 },
+      headStyles: { fillColor: [59, 130, 246], textColor: 255 },
+      alternateRowStyles: { fillColor: [245, 247, 250] },
+    });
+    
+    // Employees table
+    const finalY = (doc as any).lastAutoTable.finalY + 10;
+    doc.setFontSize(14);
+    doc.text('Xodimlar bo\'yicha hisobot', 14, finalY);
+    
+    const employeesData = data.employees.map((e, i) => [
+      (i + 1).toString(),
+      e.fullName,
+      e.workHours.toFixed(1) + ' soat',
+      e.transactions + ' ta',
+    ]);
+    
+    doc.autoTable({
+      startY: finalY + 5,
+      head: [['#', 'Xodim', 'Ish soatlari', 'Tranzaksiyalar']],
+      body: employeesData,
+      styles: { font: 'helvetica', fontSize: 10 },
+      headStyles: { fillColor: [59, 130, 246], textColor: 255 },
+      alternateRowStyles: { fillColor: [245, 247, 250] },
+    });
+    
+    doc.save(`hisobotlar_${period}_${new Date().toISOString().split('T')[0]}.pdf`);
+  };
+
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between flex-wrap gap-4">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between flex-wrap gap-4">
         <h1 className="text-3xl font-bold text-gray-900">{t('title')}</h1>
+        <div className="flex flex-wrap gap-2 sm:gap-3">
+          <Button 
+            variant="secondary" 
+            size="sm" 
+            onClick={exportToCSV} 
+            disabled={!data}
+            className="flex items-center gap-2 flex-1 sm:flex-initial justify-center"
+          >
+            <Download size={16} />
+            <span>Excel</span>
+          </Button>
+          <Button 
+            variant="secondary" 
+            size="sm" 
+            onClick={exportToPDF} 
+            disabled={!data}
+            className="flex items-center gap-2 flex-1 sm:flex-initial justify-center"
+          >
+            <FileText size={16} />
+            <span>PDF</span>
+          </Button>
+        </div>
       </div>
 
       {/* Period Tabs */}
