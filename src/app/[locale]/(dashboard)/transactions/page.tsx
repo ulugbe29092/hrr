@@ -214,7 +214,6 @@ export default function TransactionsPage() {
     
     doc.save(`kirim_chiqim_${new Date().toISOString().split('T')[0]}.pdf`);
   };
-  };
 
   return (
     <div className="space-y-6">
