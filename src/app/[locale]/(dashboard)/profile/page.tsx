@@ -222,10 +222,6 @@ export default function ProfilePage() {
       <div className="animate-fadeIn">
         <Card title="Tema sozlamalari">
           <div className="space-y-4">
-            <div className="flex items-center gap-2 mb-4">
-              <Palette size={20} className="text-gray-600" />
-              <h3 className="font-semibold text-gray-900">Sayt rangini tanlang</h3>
-            </div>
             <div className="grid grid-cols-5 gap-3">
               {/* Yorug' */}
               <button onClick={() => changeTheme('light')} className={`group relative h-20 rounded-xl border-2 transition-all duration-300 ${selectedTheme === 'light' ? 'border-blue-500 shadow-lg ring-2 ring-blue-200' : 'border-gray-200 hover:border-gray-300'}`}>
