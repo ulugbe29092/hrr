@@ -2,6 +2,7 @@ import { NextAuthOptions } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import bcrypt from 'bcryptjs';
 import { prisma } from './prisma';
+import { autoSetup } from './autoSetup';
 
 export const authOptions: NextAuthOptions = {
   providers: [
@@ -12,6 +13,9 @@ export const authOptions: NextAuthOptions = {
         password: { label: 'Password', type: 'password' },
       },
       async authorize(credentials) {
+        // Auto setup database on first login attempt
+        await autoSetup();
+
         if (!credentials?.login || !credentials?.password) {
           throw new Error('Login va parol kiritilishi shart');
         }
