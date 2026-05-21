@@ -1,0 +1,15 @@
+import { NextResponse } from 'next/server';
+
+export const dynamic = 'force-dynamic';
+
+export async function GET() {
+  return NextResponse.json({
+    env: {
+      DATABASE_URL: process.env.DATABASE_URL ? '✅ Mavjud' : '❌ Yo\'q',
+      NEXTAUTH_SECRET: process.env.NEXTAUTH_SECRET ? '✅ Mavjud' : '❌ Yo\'q',
+      NEXTAUTH_URL: process.env.NEXTAUTH_URL || '❌ Yo\'q',
+      NODE_ENV: process.env.NODE_ENV,
+    },
+    message: 'Environment variables holati',
+  });
+}
