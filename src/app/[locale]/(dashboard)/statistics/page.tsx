@@ -263,36 +263,114 @@ export default function StatisticsPage() {
         </div>
       </div>
 
-      {/* Sales by Hour (Daily only) */}
+      {/* Sales by Hour (Daily only) - Candlestick Style */}
       {period === 'daily' && data?.salesByHour && (
         <div className="animate-fadeIn" style={{ animationDelay: '400ms' }}>
           <Card title="Soatlik sotuvlar">
             <div className="overflow-x-auto">
-              <div className="min-w-[800px] grid grid-cols-24 gap-1 px-2">
-                {Array.from({ length: 24 }, (_, i) => {
-                  const hourData = data.salesByHour?.find(h => h.hour === i);
-                  const count = hourData?.count || 0;
-                  const maxCount = Math.max(...(data.salesByHour?.map(h => h.count) || [1]));
-                  const heightPercent = maxCount > 0 ? (count / maxCount) * 100 : 0;
+              <div className="min-w-[1000px] px-4 py-6">
+                <div className="relative" style={{ height: '300px' }}>
+                  {/* Grid lines */}
+                  <div className="absolute inset-0 flex flex-col justify-between">
+                    {[0, 1, 2, 3, 4].map((i) => (
+                      <div key={i} className="border-t border-gray-200" />
+                    ))}
+                  </div>
                   
-                  return (
-                    <div key={i} className="flex flex-col items-center">
-                      <div className="w-full flex flex-col justify-end items-center" style={{ height: '120px' }}>
-                        <div className="text-xs font-bold text-gray-700 mb-1">{count}</div>
-                        <div
-                          className="w-full bg-gradient-to-t from-blue-600 to-blue-400 rounded-t-lg transition-all duration-300 hover:from-blue-700 hover:to-blue-500"
-                          style={{
-                            height: `${Math.max(heightPercent, count > 0 ? 10 : 0)}%`,
-                            minHeight: count > 0 ? '20px' : '0px',
-                          }}
-                        />
-                      </div>
-                      <div className="mt-2 text-center">
-                        <p className="text-xs font-medium text-gray-600">{i}:00</p>
-                      </div>
+                  {/* Candlesticks */}
+                  <div className="absolute inset-0 flex items-end justify-between gap-1">
+                    {Array.from({ length: 24 }, (_, i) => {
+                      const currentHour = data.salesByHour?.find(h => h.hour === i);
+                      const prevHour = i > 0 ? data.salesByHour?.find(h => h.hour === i - 1) : null;
+                      
+                      const currentCount = currentHour?.count || 0;
+                      const prevCount = prevHour?.count || 0;
+                      
+                      // Agar oldingi soat bo'lmasa, birinchi soat uchun neutral (ko'k)
+                      const isIncrease = i === 0 ? null : currentCount >= prevCount;
+                      const maxCount = Math.max(...(data.salesByHour?.map(h => h.count) || [1]), 1);
+                      const heightPercent = (currentCount / maxCount) * 100;
+                      
+                      // Candlestick body va shadow
+                      const bodyHeight = Math.max(heightPercent, currentCount > 0 ? 8 : 0);
+                      const shadowHeight = Math.min(heightPercent + 15, 100);
+                      
+                      return (
+                        <div key={i} className="flex-1 flex flex-col items-center justify-end group relative" style={{ height: '100%' }}>
+                          {/* Tooltip */}
+                          <div className="absolute bottom-full mb-2 hidden group-hover:block z-10">
+                            <div className="bg-gray-900 text-white text-xs rounded-lg px-3 py-2 whitespace-nowrap shadow-xl">
+                              <div className="font-semibold">{i}:00 - {i}:59</div>
+                              <div className="mt-1">Sotuvlar: <span className="font-bold">{currentCount} ta</span></div>
+                              {i > 0 && (
+                                <div className={`mt-1 ${isIncrease ? 'text-green-400' : 'text-red-400'}`}>
+                                  {isIncrease ? '↑' : '↓'} {Math.abs(currentCount - prevCount)} ta
+                                </div>
+                              )}
+                            </div>
+                          </div>
+                          
+                          {/* Shadow (wick) */}
+                          {currentCount > 0 && (
+                            <div 
+                              className={`w-0.5 ${
+                                i === 0 ? 'bg-blue-400' : isIncrease ? 'bg-green-400' : 'bg-red-400'
+                              } transition-all duration-300`}
+                              style={{ height: `${shadowHeight}%` }}
+                            />
+                          )}
+                          
+                          {/* Body (candlestick) */}
+                          {currentCount > 0 && (
+                            <div 
+                              className={`w-full max-w-[20px] rounded-sm transition-all duration-300 group-hover:scale-110 ${
+                                i === 0 
+                                  ? 'bg-gradient-to-t from-blue-600 to-blue-400 border-2 border-blue-700' 
+                                  : isIncrease 
+                                    ? 'bg-gradient-to-t from-green-600 to-green-400 border-2 border-green-700' 
+                                    : 'bg-gradient-to-t from-red-600 to-red-400 border-2 border-red-700'
+                              } shadow-lg`}
+                              style={{ 
+                                height: `${bodyHeight}%`,
+                                marginTop: `-${shadowHeight - bodyHeight}%`
+                              }}
+                            />
+                          )}
+                          
+                          {/* Count label */}
+                          <div className="absolute -top-6 text-xs font-bold text-gray-700">
+                            {currentCount > 0 && currentCount}
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+                
+                {/* Time labels */}
+                <div className="flex justify-between mt-4 px-1">
+                  {Array.from({ length: 24 }, (_, i) => (
+                    <div key={i} className="flex-1 text-center">
+                      <span className="text-xs font-medium text-gray-600">{i}:00</span>
                     </div>
-                  );
-                })}
+                  ))}
+                </div>
+                
+                {/* Legend */}
+                <div className="flex items-center justify-center gap-6 mt-6 pt-4 border-t border-gray-200">
+                  <div className="flex items-center gap-2">
+                    <div className="w-4 h-6 bg-gradient-to-t from-green-600 to-green-400 border-2 border-green-700 rounded-sm" />
+                    <span className="text-sm text-gray-700 font-medium">Ko'payish</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <div className="w-4 h-6 bg-gradient-to-t from-red-600 to-red-400 border-2 border-red-700 rounded-sm" />
+                    <span className="text-sm text-gray-700 font-medium">Kamayish</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <div className="w-4 h-6 bg-gradient-to-t from-blue-600 to-blue-400 border-2 border-blue-700 rounded-sm" />
+                    <span className="text-sm text-gray-700 font-medium">Boshlang'ich</span>
+                  </div>
+                </div>
               </div>
             </div>
           </Card>
