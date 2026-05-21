@@ -188,108 +188,118 @@ export default function StatisticsPage() {
       </div>
 
       {/* Main Stats */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-        <Card className="shadow-lg">
-          <div className="flex items-center justify-between p-2">
-            <div className="flex-1">
-              <p className="text-sm font-medium text-gray-600 mb-2">Jami sotuvlar</p>
-              <p className="text-3xl font-bold text-blue-700">{data?.totalSales || 0} ta</p>
-              {data?.comparison && (
-                <div className={`flex items-center gap-1 mt-3 text-sm font-medium ${
-                  data.comparison.isIncrease ? 'text-green-600' : 'text-red-600'
-                }`}>
-                  {data.comparison.isIncrease ? (
-                    <TrendingUp size={18} />
-                  ) : (
-                    <TrendingDown size={18} />
-                  )}
-                  <span>{Math.abs(data.comparison.percentChange).toFixed(1)}%</span>
-                  <span className="text-gray-500 text-xs">
-                    {period === 'daily' ? 'kechadan' : period === 'weekly' ? 'o\'tgan haftadan' : period === 'monthly' ? 'o\'tgan oydan' : 'o\'tgan yildan'}
-                  </span>
-                </div>
-              )}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
+        <div className="animate-fadeIn">
+          <Card>
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm text-gray-500 mb-1">Jami sotuvlar</p>
+                <p className="text-2xl font-bold text-gray-900">{data?.totalSales || 0} ta</p>
+                {data?.comparison && (
+                  <div className={`flex items-center gap-1 mt-2 text-sm ${
+                    data.comparison.isIncrease ? 'text-green-600' : 'text-red-600'
+                  }`}>
+                    {data.comparison.isIncrease ? (
+                      <TrendingUp size={16} />
+                    ) : (
+                      <TrendingDown size={16} />
+                    )}
+                    <span>{Math.abs(data.comparison.percentChange).toFixed(1)}%</span>
+                    <span className="text-gray-500 text-xs">
+                      {period === 'daily' ? 'kechadan' : period === 'weekly' ? 'o\'tgan haftadan' : period === 'monthly' ? 'o\'tgan oydan' : 'o\'tgan yildan'}
+                    </span>
+                  </div>
+                )}
+              </div>
+              <div className="p-3 rounded-xl bg-blue-50">
+                <Package className="w-7 h-7 text-blue-600" />
+              </div>
             </div>
-            <div className="p-4 rounded-2xl bg-blue-100">
-              <Package className="w-8 h-8 text-blue-600" />
-            </div>
-          </div>
-        </Card>
+          </Card>
+        </div>
 
-        <Card className="shadow-lg">
-          <div className="flex items-center justify-between p-2">
-            <div className="flex-1">
-              <p className="text-sm font-medium text-gray-600 mb-2">Jami kirim</p>
-              <p className="text-3xl font-bold text-green-700">{data?.totalIncome || 0} ta</p>
+        <div className="animate-fadeIn" style={{ animationDelay: '100ms' }}>
+          <Card>
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm text-gray-500 mb-1">Jami kirim</p>
+                <p className="text-2xl font-bold text-green-700">{data?.totalIncome || 0} ta</p>
+              </div>
+              <div className="p-3 rounded-xl bg-green-50">
+                <TrendingUp className="w-7 h-7 text-green-600" />
+              </div>
             </div>
-            <div className="p-4 rounded-2xl bg-green-100">
-              <TrendingUp className="w-8 h-8 text-green-600" />
-            </div>
-          </div>
-        </Card>
+          </Card>
+        </div>
 
-        <Card className="shadow-lg">
-          <div className="flex items-center justify-between p-2">
-            <div className="flex-1">
-              <p className="text-sm font-medium text-gray-600 mb-2">Jami chiqim</p>
-              <p className="text-3xl font-bold text-red-700">{data?.totalExpense || 0} ta</p>
+        <div className="animate-fadeIn" style={{ animationDelay: '200ms' }}>
+          <Card>
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm text-gray-500 mb-1">Jami chiqim</p>
+                <p className="text-2xl font-bold text-red-700">{data?.totalExpense || 0} ta</p>
+              </div>
+              <div className="p-3 rounded-xl bg-red-50">
+                <TrendingDown className="w-7 h-7 text-red-600" />
+              </div>
             </div>
-            <div className="p-4 rounded-2xl bg-red-100">
-              <TrendingDown className="w-8 h-8 text-red-600" />
-            </div>
-          </div>
-        </Card>
+          </Card>
+        </div>
 
-        <Card className="shadow-lg">
-          <div className="flex items-center justify-between p-2">
-            <div className="flex-1">
-              <p className="text-sm font-medium text-gray-600 mb-2">Jami foyda</p>
-              <p className="text-3xl font-bold text-green-700">
-                {formatCurrency(data?.totalProfit || 0)}
-              </p>
+        <div className="animate-fadeIn" style={{ animationDelay: '300ms' }}>
+          <Card>
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm text-gray-500 mb-1">Jami foyda</p>
+                <p className="text-2xl font-bold text-green-700">
+                  {formatCurrency(data?.totalProfit || 0)}
+                </p>
+              </div>
+              <div className="p-3 rounded-xl bg-yellow-50">
+                <DollarSign className="w-7 h-7 text-yellow-600" />
+              </div>
             </div>
-            <div className="p-4 rounded-2xl bg-yellow-100">
-              <DollarSign className="w-8 h-8 text-yellow-600" />
-            </div>
-          </div>
-        </Card>
+          </Card>
+        </div>
       </div>
 
       {/* Top Products */}
-      <Card title="Eng ko'p sotilgan mahsulotlar" className="shadow-lg">
-        <Table>
-          <Thead>
-            <Tr>
-              <Th>#</Th>
-              <Th>Mahsulot</Th>
-              <Th>Sotildi</Th>
-              <Th>Foyda</Th>
-            </Tr>
-          </Thead>
-          <Tbody>
-            {data?.topProducts && data.topProducts.length > 0 ? (
-              data.topProducts.map((product, i) => (
-                <Tr key={i}>
-                  <Td className="text-gray-500">{i + 1}</Td>
-                  <Td className="font-medium">{product.name}</Td>
-                  <Td>
-                    <Badge variant="success">{product.quantity} ta</Badge>
-                  </Td>
-                  <Td className="font-semibold text-green-700">
-                    {formatCurrency(product.profit)}
+      <div className="animate-fadeIn" style={{ animationDelay: '400ms' }}>
+        <Card title="Eng ko'p sotilgan mahsulotlar">
+          <Table>
+            <Thead>
+              <Tr>
+                <Th>#</Th>
+                <Th>Mahsulot</Th>
+                <Th>Sotildi</Th>
+                <Th>Foyda</Th>
+              </Tr>
+            </Thead>
+            <Tbody>
+              {data?.topProducts && data.topProducts.length > 0 ? (
+                data.topProducts.map((product, i) => (
+                  <Tr key={i}>
+                    <Td className="text-gray-500">{i + 1}</Td>
+                    <Td className="font-medium">{product.name}</Td>
+                    <Td>
+                      <Badge variant="success">{product.quantity} ta</Badge>
+                    </Td>
+                    <Td className="font-semibold text-green-700">
+                      {formatCurrency(product.profit)}
+                    </Td>
+                  </Tr>
+                ))
+              ) : (
+                <Tr>
+                  <Td colSpan={4} className="text-center text-gray-500 py-8">
+                    Ma'lumot yo'q
                   </Td>
                 </Tr>
-              ))
-            ) : (
-              <Tr>
-                <Td colSpan={4} className="text-center text-gray-500 py-8">
-                  Ma'lumot yo'q
-                </Td>
-              </Tr>
-            )}
-          </Tbody>
-        </Table>
-      </Card>
+              )}
+            </Tbody>
+          </Table>
+        </Card>
+      </div>
     </div>
   );
 }
