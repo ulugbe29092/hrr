@@ -11,37 +11,6 @@
   --color-border: 229 231 235;
 }
 
-/* Tema ranglari - Butun ekran uchun */
-body {
-  background-color: rgb(var(--color-bg-secondary));
-  color: rgb(var(--color-text));
-  transition: all 0.3s ease;
-}
-
-/* Header va Card'lar */
-header, .card, [class*="Card"] {
-  background-color: rgb(var(--color-bg)) !important;
-  border-color: rgb(var(--color-border)) !important;
-}
-
-/* Primary ranglar */
-.bg-primary-50 { background-color: rgba(var(--color-primary), 0.1) !important; }
-.bg-primary-100 { background-color: rgba(var(--color-primary), 0.2) !important; }
-.bg-primary-600 { background-color: rgb(var(--color-primary)) !important; }
-.bg-primary-700 { background-color: rgb(var(--color-primary-dark)) !important; }
-.text-primary-600 { color: rgb(var(--color-primary)) !important; }
-.text-primary-700 { color: rgb(var(--color-primary-dark)) !important; }
-.border-primary-600 { border-color: rgb(var(--color-primary)) !important; }
-
-/* Button'lar */
-button:not(.bg-red-500):not(.bg-green-500):not(.bg-yellow-500):not([class*="secondary"]):not([class*="ghost"]) {
-  background-color: rgb(var(--color-primary)) !important;
-}
-
-button:not(.bg-red-500):not(.bg-green-500):not(.bg-yellow-500):not([class*="secondary"]):not([class*="ghost"]):hover {
-  background-color: rgb(var(--color-primary-dark)) !important;
-}
-
 @layer base {
   * {
     @apply border-gray-200;
@@ -49,7 +18,7 @@ button:not(.bg-red-500):not(.bg-green-500):not(.bg-yellow-500):not([class*="seco
   }
   
   body {
-    @apply text-gray-900;
+    @apply bg-gray-50 text-gray-900;
   }
 }
 

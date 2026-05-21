@@ -84,7 +84,7 @@ export default function ProfilePage() {
     const root = document.documentElement;
     
     // Eski tema klasslarini olib tashlash
-    root.classList.remove('theme-light', 'theme-blue', 'theme-green', 'theme-purple', 'theme-dark');
+    root.classList.remove('theme-light', 'theme-blue', 'theme-green', 'theme-purple', 'theme-dark', 'theme-red', 'theme-orange', 'theme-yellow', 'theme-teal', 'theme-sky', 'theme-indigo', 'theme-pink', 'theme-rose', 'theme-gray', 'theme-zinc');
     
     // Yangi tema klassini qo'shish
     root.classList.add(`theme-${theme}`);
@@ -92,25 +92,20 @@ export default function ProfilePage() {
     // CSS o'zgaruvchilarini o'rnatish
     const themes: Record<string, Record<string, string>> = {
       light: { '--color-primary': '59 130 246', '--color-primary-dark': '37 99 235', '--color-bg': '255 255 255', '--color-bg-secondary': '249 250 251', '--color-text': '17 24 39', '--color-border': '229 231 235' },
-      blue: { '--color-primary': '37 99 235', '--color-primary-dark': '29 78 216', '--color-bg': '255 255 255', '--color-bg-secondary': '239 246 255', '--color-text': '17 24 39', '--color-border': '191 219 254' },
-      green: { '--color-primary': '34 197 94', '--color-primary-dark': '22 163 74', '--color-bg': '255 255 255', '--color-bg-secondary': '240 253 244', '--color-text': '17 24 39', '--color-border': '187 247 208' },
-      purple: { '--color-primary': '168 85 247', '--color-primary-dark': '147 51 234', '--color-bg': '255 255 255', '--color-bg-secondary': '250 245 255', '--color-text': '17 24 39', '--color-border': '233 213 255' },
+      blue: { '--color-primary': '37 99 235', '--color-primary-dark': '29 78 216', '--color-bg': '239 246 255', '--color-bg-secondary': '219 234 254', '--color-text': '17 24 39', '--color-border': '191 219 254' },
+      green: { '--color-primary': '34 197 94', '--color-primary-dark': '22 163 74', '--color-bg': '240 253 244', '--color-bg-secondary': '220 252 231', '--color-text': '17 24 39', '--color-border': '187 247 208' },
+      purple: { '--color-primary': '168 85 247', '--color-primary-dark': '147 51 234', '--color-bg': '250 245 255', '--color-bg-secondary': '243 232 255', '--color-text': '17 24 39', '--color-border': '233 213 255' },
       dark: { '--color-primary': '96 165 250', '--color-primary-dark': '59 130 246', '--color-bg': '17 24 39', '--color-bg-secondary': '31 41 55', '--color-text': '243 244 246', '--color-border': '55 65 81' },
-      red: { '--color-primary': '239 68 68', '--color-primary-dark': '220 38 38', '--color-bg': '255 255 255', '--color-bg-secondary': '254 242 242', '--color-text': '17 24 39', '--color-border': '254 202 202' },
-      orange: { '--color-primary': '249 115 22', '--color-primary-dark': '234 88 12', '--color-bg': '255 255 255', '--color-bg-secondary': '255 247 237', '--color-text': '17 24 39', '--color-border': '254 215 170' },
-      yellow: { '--color-primary': '234 179 8', '--color-primary-dark': '202 138 4', '--color-bg': '255 255 255', '--color-bg-secondary': '254 252 232', '--color-text': '17 24 39', '--color-border': '254 240 138' },
-      lime: { '--color-primary': '132 204 22', '--color-primary-dark': '101 163 13', '--color-bg': '255 255 255', '--color-bg-secondary': '247 254 231', '--color-text': '17 24 39', '--color-border': '217 249 157' },
-      teal: { '--color-primary': '20 184 166', '--color-primary-dark': '15 118 110', '--color-bg': '255 255 255', '--color-bg-secondary': '240 253 250', '--color-text': '17 24 39', '--color-border': '153 246 228' },
-      cyan: { '--color-primary': '6 182 212', '--color-primary-dark': '8 145 178', '--color-bg': '255 255 255', '--color-bg-secondary': '236 254 255', '--color-text': '17 24 39', '--color-border': '165 243 252' },
-      sky: { '--color-primary': '14 165 233', '--color-primary-dark': '2 132 199', '--color-bg': '255 255 255', '--color-bg-secondary': '240 249 255', '--color-text': '17 24 39', '--color-border': '186 230 253' },
-      indigo: { '--color-primary': '99 102 241', '--color-primary-dark': '79 70 229', '--color-bg': '255 255 255', '--color-bg-secondary': '238 242 255', '--color-text': '17 24 39', '--color-border': '199 210 254' },
-      violet: { '--color-primary': '139 92 246', '--color-primary-dark': '124 58 237', '--color-bg': '255 255 255', '--color-bg-secondary': '245 243 255', '--color-text': '17 24 39', '--color-border': '221 214 254' },
-      pink: { '--color-primary': '236 72 153', '--color-primary-dark': '219 39 119', '--color-bg': '255 255 255', '--color-bg-secondary': '253 242 248', '--color-text': '17 24 39', '--color-border': '251 207 232' },
-      rose: { '--color-primary': '244 63 94', '--color-primary-dark': '225 29 72', '--color-bg': '255 255 255', '--color-bg-secondary': '255 241 242', '--color-text': '17 24 39', '--color-border': '254 205 211' },
-      slate: { '--color-primary': '100 116 139', '--color-primary-dark': '71 85 105', '--color-bg': '255 255 255', '--color-bg-secondary': '248 250 252', '--color-text': '17 24 39', '--color-border': '226 232 240' },
-      gray: { '--color-primary': '107 114 128', '--color-primary-dark': '75 85 99', '--color-bg': '255 255 255', '--color-bg-secondary': '249 250 251', '--color-text': '17 24 39', '--color-border': '229 231 235' },
-      zinc: { '--color-primary': '113 113 122', '--color-primary-dark': '82 82 91', '--color-bg': '255 255 255', '--color-bg-secondary': '250 250 250', '--color-text': '17 24 39', '--color-border': '228 228 231' },
-      stone: { '--color-primary': '120 113 108', '--color-primary-dark': '87 83 78', '--color-bg': '255 255 255', '--color-bg-secondary': '250 250 249', '--color-text': '17 24 39', '--color-border': '231 229 228' },
+      red: { '--color-primary': '239 68 68', '--color-primary-dark': '220 38 38', '--color-bg': '254 242 242', '--color-bg-secondary': '254 226 226', '--color-text': '17 24 39', '--color-border': '254 202 202' },
+      orange: { '--color-primary': '249 115 22', '--color-primary-dark': '234 88 12', '--color-bg': '255 247 237', '--color-bg-secondary': '254 237 213', '--color-text': '17 24 39', '--color-border': '254 215 170' },
+      yellow: { '--color-primary': '234 179 8', '--color-primary-dark': '202 138 4', '--color-bg': '254 252 232', '--color-bg-secondary': '254 249 195', '--color-text': '17 24 39', '--color-border': '254 240 138' },
+      teal: { '--color-primary': '20 184 166', '--color-primary-dark': '15 118 110', '--color-bg': '240 253 250', '--color-bg-secondary': '204 251 241', '--color-text': '17 24 39', '--color-border': '153 246 228' },
+      sky: { '--color-primary': '14 165 233', '--color-primary-dark': '2 132 199', '--color-bg': '240 249 255', '--color-bg-secondary': '224 242 254', '--color-text': '17 24 39', '--color-border': '186 230 253' },
+      indigo: { '--color-primary': '99 102 241', '--color-primary-dark': '79 70 229', '--color-bg': '238 242 255', '--color-bg-secondary': '224 231 255', '--color-text': '17 24 39', '--color-border': '199 210 254' },
+      pink: { '--color-primary': '236 72 153', '--color-primary-dark': '219 39 119', '--color-bg': '253 242 248', '--color-bg-secondary': '252 231 243', '--color-text': '17 24 39', '--color-border': '251 207 232' },
+      rose: { '--color-primary': '244 63 94', '--color-primary-dark': '225 29 72', '--color-bg': '255 241 242', '--color-bg-secondary': '255 228 230', '--color-text': '17 24 39', '--color-border': '254 205 211' },
+      gray: { '--color-primary': '107 114 128', '--color-primary-dark': '75 85 99', '--color-bg': '249 250 251', '--color-bg-secondary': '243 244 246', '--color-text': '17 24 39', '--color-border': '229 231 235' },
+      zinc: { '--color-primary': '113 113 122', '--color-primary-dark': '82 82 91', '--color-bg': '250 250 250', '--color-bg-secondary': '244 244 245', '--color-text': '17 24 39', '--color-border': '228 228 231' },
     };
 
     const colors = themes[theme] || themes.light;
@@ -129,9 +124,8 @@ export default function ProfilePage() {
   const getThemeName = (theme: string) => {
     const names: Record<string, string> = {
       light: 'Yorug\'', blue: 'Moviy', green: 'Yashil', purple: 'Binafsha', dark: 'Qorong\'u',
-      red: 'Qizil', orange: 'To\'q sariq', yellow: 'Sariq', lime: 'Limon', teal: 'Ko\'k-yashil',
-      cyan: 'Moviy-yashil', sky: 'Osmon', indigo: 'Nil', violet: 'Siyohrang', pink: 'Pushti',
-      rose: 'Atirgul', slate: 'Kulrang-ko\'k', gray: 'Kulrang', zinc: 'Kumush', stone: 'Tosh',
+      red: 'Qizil', orange: 'To\'q sariq', yellow: 'Sariq', teal: 'Ko\'k-yashil',
+      sky: 'Osmon', indigo: 'Nil', pink: 'Pushti', rose: 'Atirgul', gray: 'Kulrang', zinc: 'Kumush',
     };
     return names[theme] || 'Yorug\'';
   };
@@ -233,8 +227,8 @@ export default function ProfilePage() {
               <h3 className="font-semibold text-gray-900">Sayt rangini tanlang</h3>
             </div>
             <div className="grid grid-cols-5 gap-3">
-              {/* Light */}
-              <button onClick={() => changeTheme('light')} className={`group relative h-20 rounded-xl border-2 transition-all duration-300 hover:scale-105 ${selectedTheme === 'light' ? 'border-blue-500 shadow-lg' : 'border-gray-200 hover:border-gray-300'}`}>
+              {/* Yorug' */}
+              <button onClick={() => changeTheme('light')} className={`group relative h-20 rounded-xl border-2 transition-all duration-300 ${selectedTheme === 'light' ? 'border-blue-500 shadow-lg ring-2 ring-blue-200' : 'border-gray-200 hover:border-gray-300'}`}>
                 <div className="h-full rounded-lg bg-gradient-to-br from-white to-gray-100 p-2 flex flex-col items-center justify-center">
                   <div className="w-6 h-6 rounded-full bg-blue-500 mb-1"></div>
                   <span className="text-[10px] font-medium text-gray-700">Yorug'</span>
@@ -242,8 +236,8 @@ export default function ProfilePage() {
                 {selectedTheme === 'light' && <div className="absolute -top-2 -right-2 w-5 h-5 bg-blue-500 rounded-full flex items-center justify-center"><span className="text-white text-[10px]">✓</span></div>}
               </button>
 
-              {/* Blue */}
-              <button onClick={() => changeTheme('blue')} className={`group relative h-20 rounded-xl border-2 transition-all duration-300 hover:scale-105 ${selectedTheme === 'blue' ? 'border-blue-600 shadow-lg' : 'border-gray-200 hover:border-gray-300'}`}>
+              {/* Moviy */}
+              <button onClick={() => changeTheme('blue')} className={`group relative h-20 rounded-xl border-2 transition-all duration-300 ${selectedTheme === 'blue' ? 'border-blue-600 shadow-lg ring-2 ring-blue-200' : 'border-gray-200 hover:border-gray-300'}`}>
                 <div className="h-full rounded-lg bg-gradient-to-br from-blue-50 to-blue-100 p-2 flex flex-col items-center justify-center">
                   <div className="w-6 h-6 rounded-full bg-blue-600 mb-1"></div>
                   <span className="text-[10px] font-medium text-blue-700">Moviy</span>
@@ -251,8 +245,8 @@ export default function ProfilePage() {
                 {selectedTheme === 'blue' && <div className="absolute -top-2 -right-2 w-5 h-5 bg-blue-600 rounded-full flex items-center justify-center"><span className="text-white text-[10px]">✓</span></div>}
               </button>
 
-              {/* Green */}
-              <button onClick={() => changeTheme('green')} className={`group relative h-20 rounded-xl border-2 transition-all duration-300 hover:scale-105 ${selectedTheme === 'green' ? 'border-green-600 shadow-lg' : 'border-gray-200 hover:border-gray-300'}`}>
+              {/* Yashil */}
+              <button onClick={() => changeTheme('green')} className={`group relative h-20 rounded-xl border-2 transition-all duration-300 ${selectedTheme === 'green' ? 'border-green-600 shadow-lg ring-2 ring-green-200' : 'border-gray-200 hover:border-gray-300'}`}>
                 <div className="h-full rounded-lg bg-gradient-to-br from-green-50 to-green-100 p-2 flex flex-col items-center justify-center">
                   <div className="w-6 h-6 rounded-full bg-green-600 mb-1"></div>
                   <span className="text-[10px] font-medium text-green-700">Yashil</span>
@@ -260,8 +254,8 @@ export default function ProfilePage() {
                 {selectedTheme === 'green' && <div className="absolute -top-2 -right-2 w-5 h-5 bg-green-600 rounded-full flex items-center justify-center"><span className="text-white text-[10px]">✓</span></div>}
               </button>
 
-              {/* Purple */}
-              <button onClick={() => changeTheme('purple')} className={`group relative h-20 rounded-xl border-2 transition-all duration-300 hover:scale-105 ${selectedTheme === 'purple' ? 'border-purple-600 shadow-lg' : 'border-gray-200 hover:border-gray-300'}`}>
+              {/* Binafsha */}
+              <button onClick={() => changeTheme('purple')} className={`group relative h-20 rounded-xl border-2 transition-all duration-300 ${selectedTheme === 'purple' ? 'border-purple-600 shadow-lg ring-2 ring-purple-200' : 'border-gray-200 hover:border-gray-300'}`}>
                 <div className="h-full rounded-lg bg-gradient-to-br from-purple-50 to-purple-100 p-2 flex flex-col items-center justify-center">
                   <div className="w-6 h-6 rounded-full bg-purple-600 mb-1"></div>
                   <span className="text-[10px] font-medium text-purple-700">Binafsha</span>
@@ -269,8 +263,8 @@ export default function ProfilePage() {
                 {selectedTheme === 'purple' && <div className="absolute -top-2 -right-2 w-5 h-5 bg-purple-600 rounded-full flex items-center justify-center"><span className="text-white text-[10px]">✓</span></div>}
               </button>
 
-              {/* Dark */}
-              <button onClick={() => changeTheme('dark')} className={`group relative h-20 rounded-xl border-2 transition-all duration-300 hover:scale-105 ${selectedTheme === 'dark' ? 'border-gray-700 shadow-lg' : 'border-gray-200 hover:border-gray-300'}`}>
+              {/* Qorong'u */}
+              <button onClick={() => changeTheme('dark')} className={`group relative h-20 rounded-xl border-2 transition-all duration-300 ${selectedTheme === 'dark' ? 'border-gray-700 shadow-lg ring-2 ring-gray-400' : 'border-gray-200 hover:border-gray-300'}`}>
                 <div className="h-full rounded-lg bg-gradient-to-br from-gray-700 to-gray-900 p-2 flex flex-col items-center justify-center">
                   <div className="w-6 h-6 rounded-full bg-gray-600 mb-1"></div>
                   <span className="text-[10px] font-medium text-gray-200">Qorong'u</span>
@@ -278,8 +272,8 @@ export default function ProfilePage() {
                 {selectedTheme === 'dark' && <div className="absolute -top-2 -right-2 w-5 h-5 bg-gray-700 rounded-full flex items-center justify-center"><span className="text-white text-[10px]">✓</span></div>}
               </button>
 
-              {/* Red */}
-              <button onClick={() => changeTheme('red')} className={`group relative h-20 rounded-xl border-2 transition-all duration-300 hover:scale-105 ${selectedTheme === 'red' ? 'border-red-600 shadow-lg' : 'border-gray-200 hover:border-gray-300'}`}>
+              {/* Qizil */}
+              <button onClick={() => changeTheme('red')} className={`group relative h-20 rounded-xl border-2 transition-all duration-300 ${selectedTheme === 'red' ? 'border-red-600 shadow-lg ring-2 ring-red-200' : 'border-gray-200 hover:border-gray-300'}`}>
                 <div className="h-full rounded-lg bg-gradient-to-br from-red-50 to-red-100 p-2 flex flex-col items-center justify-center">
                   <div className="w-6 h-6 rounded-full bg-red-600 mb-1"></div>
                   <span className="text-[10px] font-medium text-red-700">Qizil</span>
@@ -287,8 +281,8 @@ export default function ProfilePage() {
                 {selectedTheme === 'red' && <div className="absolute -top-2 -right-2 w-5 h-5 bg-red-600 rounded-full flex items-center justify-center"><span className="text-white text-[10px]">✓</span></div>}
               </button>
 
-              {/* Orange */}
-              <button onClick={() => changeTheme('orange')} className={`group relative h-20 rounded-xl border-2 transition-all duration-300 hover:scale-105 ${selectedTheme === 'orange' ? 'border-orange-600 shadow-lg' : 'border-gray-200 hover:border-gray-300'}`}>
+              {/* To'q sariq */}
+              <button onClick={() => changeTheme('orange')} className={`group relative h-20 rounded-xl border-2 transition-all duration-300 ${selectedTheme === 'orange' ? 'border-orange-600 shadow-lg ring-2 ring-orange-200' : 'border-gray-200 hover:border-gray-300'}`}>
                 <div className="h-full rounded-lg bg-gradient-to-br from-orange-50 to-orange-100 p-2 flex flex-col items-center justify-center">
                   <div className="w-6 h-6 rounded-full bg-orange-600 mb-1"></div>
                   <span className="text-[10px] font-medium text-orange-700">To'q sariq</span>
@@ -296,8 +290,8 @@ export default function ProfilePage() {
                 {selectedTheme === 'orange' && <div className="absolute -top-2 -right-2 w-5 h-5 bg-orange-600 rounded-full flex items-center justify-center"><span className="text-white text-[10px]">✓</span></div>}
               </button>
 
-              {/* Yellow */}
-              <button onClick={() => changeTheme('yellow')} className={`group relative h-20 rounded-xl border-2 transition-all duration-300 hover:scale-105 ${selectedTheme === 'yellow' ? 'border-yellow-600 shadow-lg' : 'border-gray-200 hover:border-gray-300'}`}>
+              {/* Sariq */}
+              <button onClick={() => changeTheme('yellow')} className={`group relative h-20 rounded-xl border-2 transition-all duration-300 ${selectedTheme === 'yellow' ? 'border-yellow-600 shadow-lg ring-2 ring-yellow-200' : 'border-gray-200 hover:border-gray-300'}`}>
                 <div className="h-full rounded-lg bg-gradient-to-br from-yellow-50 to-yellow-100 p-2 flex flex-col items-center justify-center">
                   <div className="w-6 h-6 rounded-full bg-yellow-600 mb-1"></div>
                   <span className="text-[10px] font-medium text-yellow-700">Sariq</span>
@@ -305,17 +299,8 @@ export default function ProfilePage() {
                 {selectedTheme === 'yellow' && <div className="absolute -top-2 -right-2 w-5 h-5 bg-yellow-600 rounded-full flex items-center justify-center"><span className="text-white text-[10px]">✓</span></div>}
               </button>
 
-              {/* Lime */}
-              <button onClick={() => changeTheme('lime')} className={`group relative h-20 rounded-xl border-2 transition-all duration-300 hover:scale-105 ${selectedTheme === 'lime' ? 'border-lime-600 shadow-lg' : 'border-gray-200 hover:border-gray-300'}`}>
-                <div className="h-full rounded-lg bg-gradient-to-br from-lime-50 to-lime-100 p-2 flex flex-col items-center justify-center">
-                  <div className="w-6 h-6 rounded-full bg-lime-600 mb-1"></div>
-                  <span className="text-[10px] font-medium text-lime-700">Limon</span>
-                </div>
-                {selectedTheme === 'lime' && <div className="absolute -top-2 -right-2 w-5 h-5 bg-lime-600 rounded-full flex items-center justify-center"><span className="text-white text-[10px]">✓</span></div>}
-              </button>
-
-              {/* Teal */}
-              <button onClick={() => changeTheme('teal')} className={`group relative h-20 rounded-xl border-2 transition-all duration-300 hover:scale-105 ${selectedTheme === 'teal' ? 'border-teal-600 shadow-lg' : 'border-gray-200 hover:border-gray-300'}`}>
+              {/* Ko'k-yashil */}
+              <button onClick={() => changeTheme('teal')} className={`group relative h-20 rounded-xl border-2 transition-all duration-300 ${selectedTheme === 'teal' ? 'border-teal-600 shadow-lg ring-2 ring-teal-200' : 'border-gray-200 hover:border-gray-300'}`}>
                 <div className="h-full rounded-lg bg-gradient-to-br from-teal-50 to-teal-100 p-2 flex flex-col items-center justify-center">
                   <div className="w-6 h-6 rounded-full bg-teal-600 mb-1"></div>
                   <span className="text-[10px] font-medium text-teal-700">Ko'k-yashil</span>
@@ -323,17 +308,8 @@ export default function ProfilePage() {
                 {selectedTheme === 'teal' && <div className="absolute -top-2 -right-2 w-5 h-5 bg-teal-600 rounded-full flex items-center justify-center"><span className="text-white text-[10px]">✓</span></div>}
               </button>
 
-              {/* Cyan */}
-              <button onClick={() => changeTheme('cyan')} className={`group relative h-20 rounded-xl border-2 transition-all duration-300 hover:scale-105 ${selectedTheme === 'cyan' ? 'border-cyan-600 shadow-lg' : 'border-gray-200 hover:border-gray-300'}`}>
-                <div className="h-full rounded-lg bg-gradient-to-br from-cyan-50 to-cyan-100 p-2 flex flex-col items-center justify-center">
-                  <div className="w-6 h-6 rounded-full bg-cyan-600 mb-1"></div>
-                  <span className="text-[10px] font-medium text-cyan-700">Moviy-yashil</span>
-                </div>
-                {selectedTheme === 'cyan' && <div className="absolute -top-2 -right-2 w-5 h-5 bg-cyan-600 rounded-full flex items-center justify-center"><span className="text-white text-[10px]">✓</span></div>}
-              </button>
-
-              {/* Sky */}
-              <button onClick={() => changeTheme('sky')} className={`group relative h-20 rounded-xl border-2 transition-all duration-300 hover:scale-105 ${selectedTheme === 'sky' ? 'border-sky-600 shadow-lg' : 'border-gray-200 hover:border-gray-300'}`}>
+              {/* Osmon */}
+              <button onClick={() => changeTheme('sky')} className={`group relative h-20 rounded-xl border-2 transition-all duration-300 ${selectedTheme === 'sky' ? 'border-sky-600 shadow-lg ring-2 ring-sky-200' : 'border-gray-200 hover:border-gray-300'}`}>
                 <div className="h-full rounded-lg bg-gradient-to-br from-sky-50 to-sky-100 p-2 flex flex-col items-center justify-center">
                   <div className="w-6 h-6 rounded-full bg-sky-600 mb-1"></div>
                   <span className="text-[10px] font-medium text-sky-700">Osmon</span>
@@ -341,8 +317,8 @@ export default function ProfilePage() {
                 {selectedTheme === 'sky' && <div className="absolute -top-2 -right-2 w-5 h-5 bg-sky-600 rounded-full flex items-center justify-center"><span className="text-white text-[10px]">✓</span></div>}
               </button>
 
-              {/* Indigo */}
-              <button onClick={() => changeTheme('indigo')} className={`group relative h-20 rounded-xl border-2 transition-all duration-300 hover:scale-105 ${selectedTheme === 'indigo' ? 'border-indigo-600 shadow-lg' : 'border-gray-200 hover:border-gray-300'}`}>
+              {/* Nil */}
+              <button onClick={() => changeTheme('indigo')} className={`group relative h-20 rounded-xl border-2 transition-all duration-300 ${selectedTheme === 'indigo' ? 'border-indigo-600 shadow-lg ring-2 ring-indigo-200' : 'border-gray-200 hover:border-gray-300'}`}>
                 <div className="h-full rounded-lg bg-gradient-to-br from-indigo-50 to-indigo-100 p-2 flex flex-col items-center justify-center">
                   <div className="w-6 h-6 rounded-full bg-indigo-600 mb-1"></div>
                   <span className="text-[10px] font-medium text-indigo-700">Nil</span>
@@ -350,17 +326,8 @@ export default function ProfilePage() {
                 {selectedTheme === 'indigo' && <div className="absolute -top-2 -right-2 w-5 h-5 bg-indigo-600 rounded-full flex items-center justify-center"><span className="text-white text-[10px]">✓</span></div>}
               </button>
 
-              {/* Violet */}
-              <button onClick={() => changeTheme('violet')} className={`group relative h-20 rounded-xl border-2 transition-all duration-300 hover:scale-105 ${selectedTheme === 'violet' ? 'border-violet-600 shadow-lg' : 'border-gray-200 hover:border-gray-300'}`}>
-                <div className="h-full rounded-lg bg-gradient-to-br from-violet-50 to-violet-100 p-2 flex flex-col items-center justify-center">
-                  <div className="w-6 h-6 rounded-full bg-violet-600 mb-1"></div>
-                  <span className="text-[10px] font-medium text-violet-700">Siyohrang</span>
-                </div>
-                {selectedTheme === 'violet' && <div className="absolute -top-2 -right-2 w-5 h-5 bg-violet-600 rounded-full flex items-center justify-center"><span className="text-white text-[10px]">✓</span></div>}
-              </button>
-
-              {/* Pink */}
-              <button onClick={() => changeTheme('pink')} className={`group relative h-20 rounded-xl border-2 transition-all duration-300 hover:scale-105 ${selectedTheme === 'pink' ? 'border-pink-600 shadow-lg' : 'border-gray-200 hover:border-gray-300'}`}>
+              {/* Pushti */}
+              <button onClick={() => changeTheme('pink')} className={`group relative h-20 rounded-xl border-2 transition-all duration-300 ${selectedTheme === 'pink' ? 'border-pink-600 shadow-lg ring-2 ring-pink-200' : 'border-gray-200 hover:border-gray-300'}`}>
                 <div className="h-full rounded-lg bg-gradient-to-br from-pink-50 to-pink-100 p-2 flex flex-col items-center justify-center">
                   <div className="w-6 h-6 rounded-full bg-pink-600 mb-1"></div>
                   <span className="text-[10px] font-medium text-pink-700">Pushti</span>
@@ -368,8 +335,8 @@ export default function ProfilePage() {
                 {selectedTheme === 'pink' && <div className="absolute -top-2 -right-2 w-5 h-5 bg-pink-600 rounded-full flex items-center justify-center"><span className="text-white text-[10px]">✓</span></div>}
               </button>
 
-              {/* Rose */}
-              <button onClick={() => changeTheme('rose')} className={`group relative h-20 rounded-xl border-2 transition-all duration-300 hover:scale-105 ${selectedTheme === 'rose' ? 'border-rose-600 shadow-lg' : 'border-gray-200 hover:border-gray-300'}`}>
+              {/* Atirgul */}
+              <button onClick={() => changeTheme('rose')} className={`group relative h-20 rounded-xl border-2 transition-all duration-300 ${selectedTheme === 'rose' ? 'border-rose-600 shadow-lg ring-2 ring-rose-200' : 'border-gray-200 hover:border-gray-300'}`}>
                 <div className="h-full rounded-lg bg-gradient-to-br from-rose-50 to-rose-100 p-2 flex flex-col items-center justify-center">
                   <div className="w-6 h-6 rounded-full bg-rose-600 mb-1"></div>
                   <span className="text-[10px] font-medium text-rose-700">Atirgul</span>
@@ -377,17 +344,8 @@ export default function ProfilePage() {
                 {selectedTheme === 'rose' && <div className="absolute -top-2 -right-2 w-5 h-5 bg-rose-600 rounded-full flex items-center justify-center"><span className="text-white text-[10px]">✓</span></div>}
               </button>
 
-              {/* Slate */}
-              <button onClick={() => changeTheme('slate')} className={`group relative h-20 rounded-xl border-2 transition-all duration-300 hover:scale-105 ${selectedTheme === 'slate' ? 'border-slate-600 shadow-lg' : 'border-gray-200 hover:border-gray-300'}`}>
-                <div className="h-full rounded-lg bg-gradient-to-br from-slate-50 to-slate-100 p-2 flex flex-col items-center justify-center">
-                  <div className="w-6 h-6 rounded-full bg-slate-600 mb-1"></div>
-                  <span className="text-[10px] font-medium text-slate-700">Kulrang-ko'k</span>
-                </div>
-                {selectedTheme === 'slate' && <div className="absolute -top-2 -right-2 w-5 h-5 bg-slate-600 rounded-full flex items-center justify-center"><span className="text-white text-[10px]">✓</span></div>}
-              </button>
-
-              {/* Gray */}
-              <button onClick={() => changeTheme('gray')} className={`group relative h-20 rounded-xl border-2 transition-all duration-300 hover:scale-105 ${selectedTheme === 'gray' ? 'border-gray-600 shadow-lg' : 'border-gray-200 hover:border-gray-300'}`}>
+              {/* Kulrang */}
+              <button onClick={() => changeTheme('gray')} className={`group relative h-20 rounded-xl border-2 transition-all duration-300 ${selectedTheme === 'gray' ? 'border-gray-600 shadow-lg ring-2 ring-gray-300' : 'border-gray-200 hover:border-gray-300'}`}>
                 <div className="h-full rounded-lg bg-gradient-to-br from-gray-50 to-gray-100 p-2 flex flex-col items-center justify-center">
                   <div className="w-6 h-6 rounded-full bg-gray-600 mb-1"></div>
                   <span className="text-[10px] font-medium text-gray-700">Kulrang</span>
@@ -395,22 +353,13 @@ export default function ProfilePage() {
                 {selectedTheme === 'gray' && <div className="absolute -top-2 -right-2 w-5 h-5 bg-gray-600 rounded-full flex items-center justify-center"><span className="text-white text-[10px]">✓</span></div>}
               </button>
 
-              {/* Zinc */}
-              <button onClick={() => changeTheme('zinc')} className={`group relative h-20 rounded-xl border-2 transition-all duration-300 hover:scale-105 ${selectedTheme === 'zinc' ? 'border-zinc-600 shadow-lg' : 'border-gray-200 hover:border-gray-300'}`}>
+              {/* Kumush */}
+              <button onClick={() => changeTheme('zinc')} className={`group relative h-20 rounded-xl border-2 transition-all duration-300 ${selectedTheme === 'zinc' ? 'border-zinc-600 shadow-lg ring-2 ring-zinc-300' : 'border-gray-200 hover:border-gray-300'}`}>
                 <div className="h-full rounded-lg bg-gradient-to-br from-zinc-50 to-zinc-100 p-2 flex flex-col items-center justify-center">
                   <div className="w-6 h-6 rounded-full bg-zinc-600 mb-1"></div>
                   <span className="text-[10px] font-medium text-zinc-700">Kumush</span>
                 </div>
                 {selectedTheme === 'zinc' && <div className="absolute -top-2 -right-2 w-5 h-5 bg-zinc-600 rounded-full flex items-center justify-center"><span className="text-white text-[10px]">✓</span></div>}
-              </button>
-
-              {/* Stone */}
-              <button onClick={() => changeTheme('stone')} className={`group relative h-20 rounded-xl border-2 transition-all duration-300 hover:scale-105 ${selectedTheme === 'stone' ? 'border-stone-600 shadow-lg' : 'border-gray-200 hover:border-gray-300'}`}>
-                <div className="h-full rounded-lg bg-gradient-to-br from-stone-50 to-stone-100 p-2 flex flex-col items-center justify-center">
-                  <div className="w-6 h-6 rounded-full bg-stone-600 mb-1"></div>
-                  <span className="text-[10px] font-medium text-stone-700">Tosh</span>
-                </div>
-                {selectedTheme === 'stone' && <div className="absolute -top-2 -right-2 w-5 h-5 bg-stone-600 rounded-full flex items-center justify-center"><span className="text-white text-[10px]">✓</span></div>}
               </button>
             </div>
             <p className="text-xs text-gray-500 mt-3">
