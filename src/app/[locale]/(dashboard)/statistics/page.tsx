@@ -267,20 +267,33 @@ export default function StatisticsPage() {
       {period === 'daily' && data?.salesByHour && (
         <div className="animate-fadeIn" style={{ animationDelay: '400ms' }}>
           <Card title="Soatlik sotuvlar">
-            <div className="grid grid-cols-12 gap-2">
-              {data.salesByHour.map((item) => (
-                <div key={item.hour} className="text-center">
-                  <div
-                    className="bg-blue-500 rounded-t"
-                    style={{
-                      height: `${Math.max(item.count * 10, 10)}px`,
-                      maxHeight: '100px',
-                    }}
-                  />
-                  <p className="text-xs text-gray-600 mt-1">{item.hour}:00</p>
-                  <p className="text-xs font-semibold text-gray-900">{item.count}</p>
-                </div>
-              ))}
+            <div className="overflow-x-auto">
+              <div className="min-w-[800px] grid grid-cols-24 gap-1 px-2">
+                {Array.from({ length: 24 }, (_, i) => {
+                  const hourData = data.salesByHour?.find(h => h.hour === i);
+                  const count = hourData?.count || 0;
+                  const maxCount = Math.max(...(data.salesByHour?.map(h => h.count) || [1]));
+                  const heightPercent = maxCount > 0 ? (count / maxCount) * 100 : 0;
+                  
+                  return (
+                    <div key={i} className="flex flex-col items-center">
+                      <div className="w-full flex flex-col justify-end items-center" style={{ height: '120px' }}>
+                        <div className="text-xs font-bold text-gray-700 mb-1">{count}</div>
+                        <div
+                          className="w-full bg-gradient-to-t from-blue-600 to-blue-400 rounded-t-lg transition-all duration-300 hover:from-blue-700 hover:to-blue-500"
+                          style={{
+                            height: `${Math.max(heightPercent, count > 0 ? 10 : 0)}%`,
+                            minHeight: count > 0 ? '20px' : '0px',
+                          }}
+                        />
+                      </div>
+                      <div className="mt-2 text-center">
+                        <p className="text-xs font-medium text-gray-600">{i}:00</p>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
             </div>
           </Card>
         </div>

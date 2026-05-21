@@ -75,8 +75,17 @@ export default function Header({ locale }: { locale: string }) {
   return (
     <header className="bg-white border-b border-gray-200 px-6 py-4">
       <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-2xl font-bold text-gray-900">Xush kelibsiz!</h1>
+        <div className="flex items-center gap-4">
+          {/* Logo */}
+          <Link href={`/${locale}/dashboard`} className="flex items-center gap-3 group">
+            <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-blue-700 rounded-xl flex items-center justify-center shadow-lg group-hover:shadow-xl transition-all duration-300 group-hover:scale-105">
+              <span className="text-white font-bold text-xl">HR</span>
+            </div>
+            <div className="hidden sm:block">
+              <h1 className="text-xl font-bold text-gray-900 group-hover:text-blue-600 transition-colors">HR Tizimi</h1>
+              <p className="text-xs text-gray-500">Boshqaruv Paneli</p>
+            </div>
+          </Link>
         </div>
 
         <div className="flex items-center gap-4">
