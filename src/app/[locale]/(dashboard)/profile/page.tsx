@@ -130,8 +130,8 @@ export default function ProfilePage() {
     const names: Record<string, string> = {
       light: 'Yorug\'', blue: 'Moviy', green: 'Yashil', purple: 'Binafsha', dark: 'Qorong\'u',
       red: 'Qizil', orange: 'To\'q sariq', yellow: 'Sariq', lime: 'Limon', teal: 'Ko\'k-yashil',
-      cyan: 'Moviy-yashil', sky: 'Osmon', indigo: 'Indigo', violet: 'Siyohrang', pink: 'Pushti',
-      rose: 'Atirgul', slate: 'Kulrang-ko\'k', gray: 'Kulrang', zinc: 'Rux', stone: 'Tosh',
+      cyan: 'Moviy-yashil', sky: 'Osmon', indigo: 'Nil', violet: 'Siyohrang', pink: 'Pushti',
+      rose: 'Atirgul', slate: 'Kulrang-ko\'k', gray: 'Kulrang', zinc: 'Kumush', stone: 'Tosh',
     };
     return names[theme] || 'Yorug\'';
   };
@@ -345,7 +345,7 @@ export default function ProfilePage() {
               <button onClick={() => changeTheme('indigo')} className={`group relative h-20 rounded-xl border-2 transition-all duration-300 hover:scale-105 ${selectedTheme === 'indigo' ? 'border-indigo-600 shadow-lg' : 'border-gray-200 hover:border-gray-300'}`}>
                 <div className="h-full rounded-lg bg-gradient-to-br from-indigo-50 to-indigo-100 p-2 flex flex-col items-center justify-center">
                   <div className="w-6 h-6 rounded-full bg-indigo-600 mb-1"></div>
-                  <span className="text-[10px] font-medium text-indigo-700">Indigo</span>
+                  <span className="text-[10px] font-medium text-indigo-700">Nil</span>
                 </div>
                 {selectedTheme === 'indigo' && <div className="absolute -top-2 -right-2 w-5 h-5 bg-indigo-600 rounded-full flex items-center justify-center"><span className="text-white text-[10px]">✓</span></div>}
               </button>
@@ -399,7 +399,7 @@ export default function ProfilePage() {
               <button onClick={() => changeTheme('zinc')} className={`group relative h-20 rounded-xl border-2 transition-all duration-300 hover:scale-105 ${selectedTheme === 'zinc' ? 'border-zinc-600 shadow-lg' : 'border-gray-200 hover:border-gray-300'}`}>
                 <div className="h-full rounded-lg bg-gradient-to-br from-zinc-50 to-zinc-100 p-2 flex flex-col items-center justify-center">
                   <div className="w-6 h-6 rounded-full bg-zinc-600 mb-1"></div>
-                  <span className="text-[10px] font-medium text-zinc-700">Rux</span>
+                  <span className="text-[10px] font-medium text-zinc-700">Kumush</span>
                 </div>
                 {selectedTheme === 'zinc' && <div className="absolute -top-2 -right-2 w-5 h-5 bg-zinc-600 rounded-full flex items-center justify-center"><span className="text-white text-[10px]">✓</span></div>}
               </button>
